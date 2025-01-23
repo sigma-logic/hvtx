@@ -1,0 +1,9 @@
+<?xml version="1" encoding="UTF-8"?>
+<!DOCTYPE gowin-fpga-project>
+<Project>
+    <Template>FPGA</Template>
+    <Version>5</Version>
+    <Device name="GW5AST-138B" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138b-007</Device>
+    <FileList>
+    </FileList>
+</Project>

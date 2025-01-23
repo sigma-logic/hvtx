@@ -1,0 +1,11 @@
+source_dirs:
+  - core
+
+include_dirs:
+  - include
+
+verilator:
+  syntax:
+    enabled: true
+    args:
+      - -f verilator/dev.f

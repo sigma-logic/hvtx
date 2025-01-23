@@ -1,0 +1,8 @@
+.idea
+.gowin
+*.gprj.user
+/tmp
+/src
+/impl
+*.fst
+obj_dir

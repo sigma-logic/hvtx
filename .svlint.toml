@@ -1,0 +1,51 @@
+[option]
+exclude_paths = ["gowin/*"]
+copyright_linenum = 1
+copyright_year = "2025"
+copyright_holder = "Sigma Logic"
+textwidth = 100
+prefix_label = "gen_"
+
+[textrules]
+header_copyright = true
+style_directives = true
+style_semicolon = true
+style_textwidth = true
+
+[syntaxrules]
+action_block_with_side_effect = true
+blocking_assignment_in_always_at_edge = true
+blocking_assignment_in_always_ff = true
+blocking_assignment_in_always_latch = true
+case_default = true
+enum_with_type = true
+eventlist_comma_always_ff = true
+explicit_case_default = true
+explicit_if_else = true
+function_same_as_system_function = true
+function_with_automatic = true
+general_always_level_sensitive = true
+general_always_no_edge = true
+genvar_declaration_in_loop = true
+inout_with_tri = true
+keyword_forbidden_always = true
+keyword_forbidden_wire_reg = true
+keyword_required_generate = true
+localparam_explicit_type = true
+loop_statement_in_always_ff = true
+multiline_for_begin = true
+multiline_if_begin = true
+non_blocking_assignment_in_always_comb = true
+non_blocking_assignment_in_always_no_edge = true
+operator_case_equality = true
+operator_incdec = true
+operator_self_assignment = true
+parameter_default_value = true
+package_item_not_in_package = true
+parameter_explicit_type = true
+procedural_continuous_assignment = true
+generate_case_with_label = true
+generate_for_with_label = true
+generate_if_with_label = true
+prefix_instance = true
+style_indent = true
