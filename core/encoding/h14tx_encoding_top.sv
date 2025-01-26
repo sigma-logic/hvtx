@@ -61,13 +61,13 @@ module h14tx_encoding_top
 
     always_comb begin
         unique case (period)
-            Control: symbol_sel = ctl_s;
             VideoPreamble: symbol_sel = ctl_s;
             DataIslandPreamble: symbol_sel = ctl_s;
             VideoGuard: symbol_sel = guard_s;
             DataIslandGuard: symbol_sel = guard_s;
             VideoActive: symbol_sel = video_s;
             DataIslandActive: symbol_sel = data_s;
+            default: symbol_sel = ctl_s;
         endcase
     end
 

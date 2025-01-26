@@ -7,20 +7,20 @@ module h14tx_timings_top
 #(
     parameter integer BitWidth = 11,
     parameter integer BitHeight = 10,
-    parameter logic [BitWidth-1:0] FrameWidth = 1650,
-    parameter logic [BitHeight-1:0] FrameHeight = 750,
-    parameter logic [BitWidth-1:0] ActiveWidth = 1280,
-    parameter logic [BitHeight-1:0] ActiveHeight = 720,
-    parameter logic [BitWidth-1:0] HFrontPorch = 110,
-    parameter logic [BitHeight-1:0] HSyncWidth = 40,
-    parameter logic [BitWidth-1:0] VFrontPorch = 5,
-    parameter logic [BitHeight-1:0] VSyncWidth = 5,
+    parameter logic [BitWidth-1:0] FrameWidth = BitWidth'(1650),
+    parameter logic [BitHeight-1:0] FrameHeight = BitHeight'(750),
+    parameter logic [BitWidth-1:0] ActiveWidth = BitWidth'(1280),
+    parameter logic [BitHeight-1:0] ActiveHeight = BitHeight'(720),
+    parameter logic [BitWidth-1:0] HFrontPorch = BitWidth'(110),
+    parameter logic [BitWidth-1:0] HSyncWidth = BitWidth'(40),
+    parameter logic [BitHeight-1:0] VFrontPorch = BitHeight'(5),
+    parameter logic [BitHeight-1:0] VSyncWidth = BitHeight'(5),
     parameter logic InvertPolarity = 1'b0
 ) (
     input logic clk,
     input logic rst_n,
 
-    output logic [BitWidth-1:0] x,
+    output logic [ BitWidth-1:0] x,
     output logic [BitHeight-1:0] y,
 
     output logic hsync,
@@ -44,12 +44,12 @@ module h14tx_timings_top
     );
 
     h14tx_timings_sync #(
-        .BitWidth(BitWidth),
-        .BitHeight(BitHeight),
+        .BitWidth  (BitWidth),
+        .BitHeight (BitHeight),
         .HSyncStart(ActiveWidth + HFrontPorch),
-        .HSyncEnd(ActiveWidth + HFrontPorch + HSyncWidth),
+        .HSyncEnd  (ActiveWidth + HFrontPorch + HSyncWidth),
         .VSyncStart(ActiveHeight + VFrontPorch),
-        .VSyncEnd(ActiveHeight + VFrontPorch + VSyncWidth)
+        .VSyncEnd  (ActiveHeight + VFrontPorch + VSyncWidth)
     ) u_sync_timings (
         .x(x),
         .y(y),

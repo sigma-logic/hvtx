@@ -16,7 +16,7 @@ verilog = [
 ]
 
 [programmer]
-fs = "impl/pnr/project.fs"
+fs = "impl/pnr/arv-vo.fs"
 
 preset.sram = { op = "2" }
 preset.spi = { op = "53" }

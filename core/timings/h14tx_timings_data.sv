@@ -12,7 +12,7 @@ module h14tx_timings_data
     parameter logic [BitWidth-1:0] FrameWidth = BitWidth'(1650),
     parameter logic [BitWidth-1:0] ActiveWidth = BitWidth'(1280)
 ) (
-    input logic [BitWidth-1:0] x,
+    input logic [ BitWidth-1:0] x,
     input logic [BitHeight-1:0] y,
 
     output period_t timings
@@ -20,17 +20,15 @@ module h14tx_timings_data
 
     localparam logic [10:0] HardLimit = 10'd18;
 
-    localparam logic [10:0] PacketsFit =
-        (FrameWidth
-            - ActiveWidth // VD period
-            - 2 // V guard
-            - 8 // V preamble
-            - 4 // Min V control period
-            - 2 // DI trailing guard
-            - 2 // DI leading guard
-            - 8 // DI premable
-            - 4 // Min DI control period
-        ) / 32;
+    localparam logic [10:0] PacketsFit = (FrameWidth - ActiveWidth  // VD period
+    - 2  // V guard
+    - 8  // V preamble
+    - 4  // Min V control period
+    - 2  // DI trailing guard
+    - 2  // DI leading guard
+    - 8  // DI premable
+    - 4  // Min DI control period
+    ) / 32;
 
     localparam logic [10:0] MaxPackets = PacketsFit > HardLimit ? HardLimit : PacketsFit;
     localparam logic [10:0] MaxPacketsClocks = MaxPackets * 32;
@@ -50,11 +48,9 @@ module h14tx_timings_data
             (x >= TrailingGuardStart && x < TrailingGuardEnd)
         ) begin
             timings = DataIslandGuard;
-        end
-        else if (x >= ActiveStart && x < TrailingGuardStart) begin
+        end else if (x >= ActiveStart && x < TrailingGuardStart) begin
             timings = DataIslandActive;
-        end
-        else begin
+        end else begin
             timings = Control;
         end
     end

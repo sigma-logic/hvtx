@@ -32,7 +32,7 @@ package h14tx_pkg;
 
     typedef struct packed {
         diff_t clk;
-        diff_t [3:0] chan;
+        diff_t [2:0] chan;
     } hdmi_tmds_t;
 
     typedef struct packed {
@@ -52,6 +52,11 @@ package h14tx_pkg;
         integer timings_v_sync_width;
         logic   timings_invert_polarity;
     } cea861d_config_t;
+
+    typedef struct {
+        logic [23:0] header;
+        logic [55:0] sub[3:0];
+    } packet_t;
 
 endpackage : h14tx_pkg
 

@@ -15,42 +15,21 @@ module h14tx_dvo
     import h14tx_pkg::DataIslandActive;
     import h14tx_pkg::DataIslandPreamble;
     import h14tx_pkg::DataIslandGuard;
-
+    import h14tx_pkg::packet_t;
 #(
-    parameter integer Mode = 4
+    parameter integer Mode = 4,
+    parameter cea861d_config_t CeaCfg = `CEA861D_CONFIG(Mode)
 ) (
-    input logic clk_70mhz,
-    input logic rst_n
+    input logic clk,
+    input logic rst_n,
+
+    input video_t [2:0] video,
+
+    output logic [ CeaCfg.bit_width-1:0] x,
+    output logic [CeaCfg.bit_height-1:0] y,
+
+    output symbol_t [2:0] channels
 );
-
-    localparam cea861d_config_t CeaCfg = `CEA861D_CONFIG(Mode);
-
-    logic lock, pixel_clk, serial_clk;
-
-    h14tx_pll #(
-        .IDivSel (CeaCfg.pll_idiv_sel),
-        .ODiv0Sel(CeaCfg.pll_odiv0_sel),
-        .ODiv1Sel(CeaCfg.pll_odiv1_sel),
-        .MDivSel (CeaCfg.pll_mdiv_sel)
-    ) u_pll (
-        .ref_clk_70mhz(clk_70mhz),
-        .rst_n(rst_n),
-        .lock(lock),
-        .pixel_clk(pixel_clk),
-        .serial_clk(serial_clk)
-    );
-
-    logic timings_rst_n;
-
-    h14tx_rst_sync u_rst_sync (
-        .clk(pixel_clk),
-        .lock(lock),
-        .ext_rst_n(rst_n),
-        .sync_rst_n(timings_rst_n)
-    );
-
-    logic [ CeaCfg.bit_width-1:0] x;
-    logic [CeaCfg.bit_height-1:0] y;
 
     logic hsync, vsync;
 
@@ -66,8 +45,8 @@ module h14tx_dvo
         .HFrontPorch(CeaCfg.timings_h_front_porch),
         .VFrontPorch(CeaCfg.timings_v_front_porch)
     ) u_timings (
-        .clk(pixel_clk),
-        .rst_n(timings_rst_n),
+        .clk(clk),
+        .rst_n(rst_n),
         .x(x),
         .y(y),
         .hsync(hsync),
@@ -75,44 +54,56 @@ module h14tx_dvo
         .period(period)
     );
 
-    ctl_t   [2:0] ctl;
-    data_t  [2:0] data;
-    video_t [2:0] video;
+    packet_t pkt;
 
-    // Setup Control Period
+    h14tx_pkt_null u_null_pkt (.pkt(pkt));
+
+    logic [8:0] chunk;
+    logic [4:0] counter;
+
+    h14tx_packet_assembler u_pkt_assembler (
+        .clk(clk),
+        .rst_n(rst_n),
+        .active(period == DataIslandActive),
+        .packet(pkt),
+        .counter(counter),
+        .chunk(chunk)
+    );
+
+    ctl_t  ctl [2:0];
+    data_t data[2:0];
+
     always_comb begin
-        ctl[0] = {hsync, vsync};
+        ctl[0]  = {hsync, vsync};
+        ctl[1]  = 2'b00;
+        ctl[2]  = 2'b00;
 
-        unique case (period)
-            VideoPreamble: ctl[1] = 2'b01;
-            DataIslandPreamble: begin
-                ctl[1] = 2'b01;
-                ctl[2] = 2'b01;
-            end
-            default: begin
-                ctl[1] = 2'b00;
-                ctl[2] = 2'b00;
-            end
-        endcase
+        data[0] = {hsync, vsync, x != 0, chunk[0]};
+        data[1] = chunk[4:1];
+        data[2] = chunk[8:5];
+
+        if (period == VideoPreamble) begin
+            ctl[1] = 2'b01;
+        end else if (period == DataIslandPreamble) begin
+            ctl[1] = 2'b01;
+            ctl[2] = 2'b01;
+        end
     end
 
     generate
         for (genvar i = 0; i < 3; i = i + 1) begin : gen_chan
-            symbol_t symbol;
-
             h14tx_encoding_top #(
                 .Chan(i)
             ) u_encoder (
-                .clk(pixel_clk),
-                .rst_n(timings_rst_n),
+                .clk(clk),
+                .rst_n(rst_n),
                 .ctl(ctl[i]),
                 .data(data[i]),
                 .video(video[i]),
                 .period(period),
-                .symbol(symbol)
+                .symbol(channels[i])
             );
         end
     endgenerate
-
 endmodule : h14tx_dvo
 

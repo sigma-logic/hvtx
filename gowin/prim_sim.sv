@@ -389,7 +389,7 @@ output Q;
 
 parameter INIT = 1'b1;
 reg Q_reg;
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 initial Q_reg = INIT;
 
@@ -419,7 +419,7 @@ output Q;
 
 parameter INIT = 1'b0;
 reg Q_reg;
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 initial Q_reg = INIT;
 
@@ -449,7 +449,7 @@ output Q;
 
 parameter INIT = 1'b1;
 reg Q_reg;
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 initial Q_reg = INIT;
 
@@ -479,7 +479,7 @@ output Q;
 
 parameter INIT = 1'b0;
 reg Q_reg;
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 initial Q_reg = INIT;
 
@@ -510,7 +510,7 @@ output Q;
 
 parameter INIT = 1'b0;
 reg Q_reg;
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 initial Q_reg = INIT;
 
@@ -535,7 +535,7 @@ output Q;
 
 parameter INIT = 1'b1;
 reg Q_reg;
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 initial Q_reg = INIT;
 
@@ -817,7 +817,6 @@ wire GSRO;
 assign GSRO = GSRI;
 
 endmodule //GSR (global set/reset control)
-
 
 //IOBs
 module IBUF (O, I);
@@ -1292,7 +1291,7 @@ reg mc;
 reg [13:0] addr;
 integer dwidth = BIT_WIDTH;
 integer awidth; // ADDR_WIDTH
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 initial begin
     bp_reg = 0;
@@ -1598,7 +1597,7 @@ reg [BIT_WIDTH-1:0] mem_t;
 reg [14:0] addr;
 reg mc,bs_en;
 wire pce;
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 integer dwidth = BIT_WIDTH;
 integer awidth; // ADDR_WIDTH
@@ -1890,7 +1889,7 @@ reg [13:0] addr_a, addr_b;
 reg mc,bs_ena,bs_enb;
 wire pcea;
 wire pceb;
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 integer bit_width_d0 = BIT_WIDTH_0;
 integer bit_width_d1 = BIT_WIDTH_1;
@@ -2176,7 +2175,7 @@ wire pcea,pceb;
 integer bit_width_d0 = BIT_WIDTH_0;
 integer bit_width_d1 = BIT_WIDTH_1;
 integer bit_width_a0, bit_width_a1; // ADDR_WIDTH
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 initial begin
     bp_reg = 0;
@@ -2424,7 +2423,7 @@ reg [13:0] addr_a, addr_b;
 integer bit_width_d0 = BIT_WIDTH_0;
 integer bit_width_d1 = BIT_WIDTH_1;
 integer bit_width_a0, bit_width_a1; // ADDR_WIDTH
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 initial begin
     bpa_reg = 0;
@@ -2834,7 +2833,7 @@ integer bit_width_d0 = BIT_WIDTH_0;
 integer bit_width_d1 = BIT_WIDTH_1;
 integer bit_width_a0, bit_width_a1; // ADDR_WIDTH
 reg [14:0] addr_a, addr_b;
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 initial begin
     bpa_reg = 0;
@@ -3189,7 +3188,7 @@ reg [BIT_WIDTH-1:0] mem_t;
 reg [13:0] addr;
 integer dwidth = BIT_WIDTH;
 integer awidth; // ADDR_WIDTH
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 initial begin
     bp_reg = 0;
@@ -3387,7 +3386,7 @@ reg [BIT_WIDTH-1:0] mem_t;
 reg [14:0] addr;
 integer dwidth = BIT_WIDTH;
 integer awidth; // ADDR_WIDTH
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 initial begin
     bp_reg = 0;
@@ -3674,7 +3673,7 @@ integer i_a,i_d,i_m,i;
 reg [7:0] ecc_a, ecc_b;
 reg [7:0] ecc_addr;
 reg [1:0] ecc_err;
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 reg [71:0] mem_init [mem_depth-1:0];
 
 initial begin
@@ -4100,7 +4099,7 @@ reg [1:0] accsel_int;
 reg [1:0] accsel_int0_reg_async,accsel_int0_reg_sync,accsel_int0,accsel_int0_reg,accsel_int1_reg_async,accsel_int1_reg_sync,accsel_int1,accsel_int1_reg;
 
 
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 
 always @(ina0_reg_async or ina0_reg_sync or ina1_reg_async or ina1_reg_sync or inb0_reg_async or inb0_reg_sync or inb1_reg_async or inb1_reg_sync or ina_preg_async or ina_preg_sync or accsel0_reg_async or accsel0_reg_sync or accsel1_reg_async or accsel1_reg_sync or casisel0_reg_async or casisel0_reg_sync or casisel1_reg_async or casisel1_reg_sync or addsub0_reg0_async or addsub0_reg0_sync or addsub0_reg1_async or addsub0_reg1_sync or addsub1_reg0_async or addsub1_reg0_sync or addsub1_reg1_async or addsub1_reg1_sync or out0_reg_async or out0_reg_sync or out1_reg_async or out1_reg_sync or out_preg_async or out_preg_sync or out_reg_sync or out_reg_async or accsel_int0_reg_async or accsel_int0_reg_sync or accsel_int0_reg or accsel_int1_reg_async or accsel_int1_reg_sync or accsel_int1_reg)
@@ -5362,7 +5361,7 @@ wire a_sel_sig,accsel_sig,casisel_sig,csel_sig,addsub0_sig,addsub1_sig;
 reg [1:0] accsel_int;
 reg [1:0] accsel_int0_reg_async,accsel_int0_reg_sync,accsel_int0,accsel_int0_reg,accsel_int1_reg_async,accsel_int1_reg_sync,accsel_int1,accsel_int1_reg;
 
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 
 always @(ina_reg_async or ina_reg_sync or inb_reg_async or inb_reg_sync or ind_reg_async or ind_reg_sync or inc_ireg_async or inc_ireg_sync or inc_preg_async or inc_preg_sync or psel_reg_async or psel_reg_sync or csel0_reg_async or csel0_reg_sync or csel1_reg_async or csel1_reg_sync or casisel0_reg_async or casisel0_reg_sync or casisel1_reg_async or casisel1_reg_sync or accsel0_reg_async or accsel0_reg_sync or accsel1_reg_async or accsel1_reg_sync or addsub0_reg0_async or addsub0_reg0_sync or addsub0_reg1_async or addsub0_reg1_sync or addsub1_reg0_async or addsub1_reg0_sync or addsub1_reg1_async or addsub1_reg1_sync or paddsub_reg0_async or paddsub_reg0_sync or out0_reg_async or out0_reg_sync or out_preg_async or out_preg_sync or ina_preg_sync or ina_preg_async or out_reg_sync or out_reg_async or accsel_int0_reg_async or accsel_int0_reg_sync or accsel_int0_reg or accsel_int1_reg_async or accsel_int1_reg_sync or accsel_int1_reg)
@@ -6863,7 +6862,7 @@ reg [23:0] out0_reg_async,out0_reg_sync,out0,out0_reg;
 wire [23:0] m_out0;
 reg [23:0] out_reg_async,out_reg_sync,out_reg,d_out;
 
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 
     always @(ina_reg_async or ina_reg_sync or inb_reg_async or inb_reg_sync or out0_reg_async or out0_reg_sync or out_reg_sync or out_reg_async)
@@ -7211,7 +7210,7 @@ wire preadd_en,p_addsub_sig;
 reg paddsub_reg0_async,paddsub_reg0_sync,paddsub_reg0,paddsub_0;
 reg psel_reg_async,psel_reg_sync,psel_reg,psel_0;
 
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 
 always @(ina_reg_async or ina_reg_sync or inb_reg_async or inb_reg_sync or ind_reg_async or ind_reg_sync or paddsub_reg0_async or paddsub_reg0_sync or psel_reg_async or psel_reg_sync or out0_reg_async or out0_reg_sync or out_reg_sync or out_reg_async)
@@ -7911,7 +7910,7 @@ output Q1;
 parameter Q0_INIT = 1'b0;
 parameter Q1_INIT = 1'b0;
 
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 reg q0_oreg, q1_oreg,q0_reg, q1_reg;
 reg q0_ireg, q1_ireg;
@@ -7973,7 +7972,7 @@ output Q1;
 parameter Q0_INIT = 1'b0;
 parameter Q1_INIT = 1'b0;
 
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 reg q0_oreg, q1_oreg,q0_reg, q1_reg;
 reg q0_ireg, q1_ireg;
@@ -8043,7 +8042,7 @@ output  Q0,Q1;
 wire grstn;
 wire lrstn;
 //synthesis translate_off
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 reg d0_reg;
@@ -8111,7 +8110,7 @@ parameter INIT = 1'b0;
 reg d0_reg_0,d0_reg_1,d0_reg_2;
 reg d1_reg_0,d1_reg_1,d1_reg_2;
 reg tx_reg_0,tx_reg_1,tx_reg_p,tx_reg_n;
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 initial begin
     d0_reg_0 = 1'b0;
@@ -8186,7 +8185,7 @@ output Q0,Q1;
 parameter TXCLK_POL = 1'b0; //1'b0:Rising edge output; 1'b1:Falling edge output
 parameter INIT = 1'b0;
 
-wire gsrt = GSR.GSRO;
+wire gsrt = 1'b1; // GSR.GSRO
 
 reg d0_reg_0,d0_reg_1,d0_reg_2;
 reg d1_reg_0,d1_reg_1,d1_reg_2;
@@ -8290,7 +8289,7 @@ wire tclk_sig;
 wire grstn;
 wire lrstn;
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 assign tclk_sig = (TCLK_SOURCE == "DQSW") ? TCLK : ~TCLK;
 
@@ -8389,7 +8388,7 @@ wire grstn,lrstn;
 wire calib_state_en,dcnt_en;
 wire dsel_en,d_up_en;
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 initial begin
@@ -8592,7 +8591,7 @@ wire grstn,lrstn;
 wire calib_state_en,dcnt_en;
 wire dsel_en,d_up_en;
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 initial begin
@@ -8806,7 +8805,7 @@ wire grstn,lrstn;
 wire calib_state_en,dcnt_en;
 wire dsel_en,d_up_en;
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 initial begin
@@ -9037,7 +9036,7 @@ wire grstn,lrstn;
 wire calib_state_en,dcnt_en;
 wire dsel_en,d_up_en;
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 initial begin
@@ -9301,7 +9300,7 @@ initial begin
     data_sel = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge ICLK or negedge grstn or negedge lrstn) begin
@@ -9462,7 +9461,7 @@ input D, FCLK, PCLK, CALIB, RESET;
 output Q0, Q1, Q2, Q3, Q4, Q5, Q6;
 wire grstn;
 wire lrstn;
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 reg d0_reg;
@@ -9693,7 +9692,7 @@ initial begin
     data_sel = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge ICLK or negedge grstn or negedge lrstn) begin
@@ -9885,7 +9884,7 @@ wire grstn,lrstn;
 wire calib_state_en,dcnt_en;
 wire dsel_en,d_up_en;
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 initial begin
@@ -10134,7 +10133,7 @@ wire grstn,lrstn;
 wire calib_state_en,dcnt_en;
 wire dsel_en,d_up_en;
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 initial begin
@@ -10472,7 +10471,7 @@ initial begin
     dsel = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge PCLK or negedge grstn or negedge lrstn)
@@ -10647,7 +10646,7 @@ initial begin
     dsel1 = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 assign tclk_sig = (TCLK_SOURCE == "DQSW") ? TCLK : ~TCLK;
 
@@ -10848,7 +10847,7 @@ initial begin
     dsel = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge PCLK or negedge grstn or negedge lrstn)
@@ -11043,7 +11042,7 @@ initial begin
     dcnt1 = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge PCLK or negedge grstn or negedge lrstn)
@@ -11228,7 +11227,7 @@ initial begin
     hcnt1 = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 assign tclk_sig = (TCLK_SOURCE == "DQSW") ? TCLK : ~TCLK;
 
@@ -11430,7 +11429,7 @@ initial begin
     dcnt2 = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge PCLK or negedge grstn or negedge lrstn)
@@ -11577,7 +11576,7 @@ initial begin
     dcnt2 = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge FCLK or negedge grstn or negedge lrstn) begin
@@ -11725,7 +11724,7 @@ initial begin
     dcnt2 = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 assign lrstn = (~RESET);
 
 always @(posedge FCLK or negedge grstn or negedge lrstn) begin
@@ -12005,7 +12004,7 @@ reg [31:0] D_data;
 reg [31:0] Q_data;
 
 wire grstn;
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 
 
 wire DF0,DF1;
@@ -12753,7 +12752,7 @@ reg stop_0,stop_1n;
 integer cnt;
 reg clk_effect,lock_reg;
 wire reset_sig;
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 wire clk_out;
 
 initial begin
@@ -12888,7 +12887,7 @@ reg cnt_start,cnt_step_start,cnt_value_start;
 reg flag_add,flag_sub;
 
 reg CLKOUT;
-wire grstn = GSR.GSRO;
+wire grstn = 1'b1; // GSR.GSRO
 
 initial begin
     step_data = 8'b00000000;
@@ -13069,7 +13068,7 @@ reg d_sel,cnt_0,cnt_1,cnt_2,clk_div_1;
 wire dsel_clk;
 
 wire grstn;
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 
 initial begin
     cnt_0 = 1'b0;
@@ -13244,7 +13243,7 @@ initial begin
     reset_0 = 1'b0;
 end
 
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 
 always @(posedge HCLKIN or negedge grstn or negedge RESETN) begin
     if (!grstn) begin
@@ -13278,7 +13277,7 @@ output CLKOUT;
 
 reg ce_reg0,ce_reg1,ce_reg2,ce_reg3;
 wire grstn;
-assign grstn = GSR.GSRO;
+assign grstn = 1'b1; // GSR.GSRO
 
 always @(negedge CLKIN or negedge grstn) begin
     if(!grstn) begin
