@@ -2,8 +2,6 @@
 
 // verilator lint_off DECLFILENAME
 
-`include "h14tx/macros.svh"
-
 package h14tx_pkg;
 
     typedef struct packed {
@@ -11,11 +9,11 @@ package h14tx_pkg;
         logic v;
     } sync_timings_t;
 
-    typedef `VEC(2) ctl_t;
-    typedef `VEC(4) data_t;
-    typedef `VEC(8) video_t;
+    typedef logic [1:0] ctl_t;
+    typedef logic [3:0] data_t;
+    typedef logic [7:0] video_t;
 
-    typedef enum `VEC(3) {
+    typedef enum logic [2:0] {
         Control = 3'd0,
         VideoActive = 3'd1,
         VideoPreamble = 3'd2,
@@ -25,32 +23,35 @@ package h14tx_pkg;
         DataIslandGuard = 3'd6
     } period_t;
 
-    typedef `VEC(10) symbol_t;
+    typedef logic [9:0] symbol_t;
 
-    virtual class frame #(
-        parameter integer BitWidth = 11,
-        parameter integer BitHeight = 10
-    );
+    typedef struct packed {
+        logic p;
+        logic n;
+    } diff_t;
 
-        typedef struct packed {
-            `VEC(BitWidth) x;
-            `VEC(BitHeight) y;
-        } cursor_t;
+    typedef struct packed {
+        diff_t clk;
+        diff_t [3:0] chan;
+    } hdmi_tmds_t;
 
-        typedef struct packed {
-            integer bit_width;
-            integer bit_height;
-            `VEC(BitWidth) frame_width;
-            `VEC(BitHeight) frame_height;
-            `VEC(BitWidth) active_width;
-            `VEC(BitHeight) active_height;
-            `VEC(BitWidth) h_front_porch;
-            `VEC(BitHeight) v_front_porch;
-            `VEC(BitWidth) h_sync_width;
-            `VEC(BitHeight) v_sync_width;
-            logic sync_polarity_invert;
-        } timings_config_t;
-
-    endclass
+    typedef struct packed {
+        integer pll_idiv_sel;
+        integer pll_odiv0_sel;
+        integer pll_odiv1_sel;
+        integer pll_mdiv_sel;
+        integer bit_width;
+        integer bit_height;
+        integer timings_frame_width;
+        integer timings_frame_height;
+        integer timings_active_width;
+        integer timings_active_height;
+        integer timings_h_front_porch;
+        integer timings_v_front_porch;
+        integer timings_h_sync_width;
+        integer timings_v_sync_width;
+        logic   timings_invert_polarity;
+    } cea861d_config_t;
 
 endpackage : h14tx_pkg
+

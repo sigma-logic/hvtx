@@ -1,7 +1,0 @@
-[verilog]
-include_paths = ["include"]
-defines = ["DEV"]
-
-[option]
-linter = true
-

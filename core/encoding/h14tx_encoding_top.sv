@@ -1,7 +1,6 @@
 // Copyright (c) 2025 Sigma Logic
 
 `include "h14tx/registers.svh"
-`include "h14tx/macros.svh"
 
 module h14tx_encoding_top
     import h14tx_pkg::period_t;
@@ -18,13 +17,12 @@ module h14tx_encoding_top
     import h14tx_pkg::DataIslandGuard;
 #(
     parameter integer Chan = 0
-)
-(
+) (
     input logic clk,
     input logic rst_n,
 
-    input ctl_t ctl,
-    input data_t data,
+    input ctl_t   ctl,
+    input data_t  data,
     input video_t video,
 
     input period_t period,
@@ -40,7 +38,7 @@ module h14tx_encoding_top
     );
 
     h14tx_encoding_terc4 u_terc4_enc (
-        .data(data),
+        .data  (data),
         .symbol(data_s)
     );
 

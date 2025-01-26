@@ -1,26 +1,25 @@
-`timescale 1ps/1ps
+`timescale 1ns / 1ps
 
-`include "h14tx/macros.svh"
 `include "h14tx/cea861d.svh"
 
 module tb_timings
     import h14tx_pkg::period_t;
+    import h14tx_pkg::cea861d_config_t;
 ;
 
     logic clk, rst_n;
 
     localparam integer VideoMode = 4;
-    localparam integer BitWidth = `CEA861D_BIT_WIDTH(VideoMode);
-    localparam integer BitHeight = `CEA861D_BIT_HEIGHT(VideoMode);
+    localparam cea861d_config_t CeaCfg = `CEA861D_CONFIG(VideoMode);
 
-    `VEC(BitWidth) x;
-    `VEC(BitHeight) y;
+    logic [ CeaCfg.bit_width-1:0] x;
+    logic [CeaCfg.bit_height-1:0] y;
 
     logic hsync, vsync;
     period_t period;
 
     clk_rst_gen u_clk_rst_gen (
-        .clk(clk),
+        .clk  (clk),
         .rst_n(rst_n)
     );
 
@@ -39,7 +38,7 @@ module tb_timings
         $dumpvars;
 
         // Wait until frame end
-        #1237500
+        #16666667
 
         // Wait extra ticks
         #1000

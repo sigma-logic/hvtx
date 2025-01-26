@@ -1,8 +1,5 @@
 // Copyright (c) 2025 Sigma Logic
 
-`include "h14tx/registers.svh"
-`include "h14tx/macros.svh"
-
 module h14tx_timings_data
     import h14tx_pkg::period_t;
     import h14tx_pkg::Control;
@@ -12,18 +9,18 @@ module h14tx_timings_data
 #(
     parameter integer BitWidth = 11,
     parameter integer BitHeight = 10,
-    parameter `VEC(BitWidth) FrameWidth = BitWidth'(1650),
-    parameter `VEC(BitWidth) ActiveWidth = BitWidth'(1280)
+    parameter logic [BitWidth-1:0] FrameWidth = BitWidth'(1650),
+    parameter logic [BitWidth-1:0] ActiveWidth = BitWidth'(1280)
 ) (
-    input `VEC(BitWidth) x,
-    input `VEC(BitHeight) y,
+    input logic [BitWidth-1:0] x,
+    input logic [BitHeight-1:0] y,
 
     output period_t timings
 );
 
-    localparam `VEC(10) HardLimit = 10'd18;
+    localparam logic [10:0] HardLimit = 10'd18;
 
-    localparam `VEC(10) PacketsFit =
+    localparam logic [10:0] PacketsFit =
         (FrameWidth
             - ActiveWidth // VD period
             - 2 // V guard
@@ -35,14 +32,14 @@ module h14tx_timings_data
             - 4 // Min DI control period
         ) / 32;
 
-    localparam `VEC(10) MaxPackets = PacketsFit > HardLimit ? HardLimit : PacketsFit;
-    localparam `VEC(10) MaxPacketsClocks = MaxPackets * 32;
+    localparam logic [10:0] MaxPackets = PacketsFit > HardLimit ? HardLimit : PacketsFit;
+    localparam logic [10:0] MaxPacketsClocks = MaxPackets * 32;
 
-    localparam `VEC(BitWidth) PreambleStart = ActiveWidth + 4;
-    localparam `VEC(BitWidth) LeadingGuardStart = ActiveWidth + 4 + 8;
-    localparam `VEC(BitWidth) ActiveStart = ActiveWidth + 4 + 8 + 2;
-    localparam `VEC(BitWidth) TrailingGuardStart = ActiveWidth + MaxPacketsClocks;
-    localparam `VEC(BitWidth) TrailingGuardEnd = TrailingGuardStart + 2;
+    localparam logic [BitWidth-1:0] PreambleStart = ActiveWidth + 4;
+    localparam logic [BitWidth-1:0] LeadingGuardStart = ActiveWidth + 4 + 8;
+    localparam logic [BitWidth-1:0] ActiveStart = ActiveWidth + 4 + 8 + 2;
+    localparam logic [BitWidth-1:0] TrailingGuardStart = ActiveWidth + MaxPacketsClocks;
+    localparam logic [BitWidth-1:0] TrailingGuardEnd = TrailingGuardStart + 2;
 
     always_comb begin
         if (x >= PreambleStart && x < LeadingGuardStart) begin

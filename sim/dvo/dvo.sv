@@ -24,8 +24,8 @@ module dvo
         .timings_rst_n(timings_rst_n)
     );
 
-    `VEC(BitWidth) x;
-    `VEC(BitHeight) y;
+    logic [BitWidth-1:0] x;
+    logic [BitHeight-1:0] y;
     logic hsync, vsync;
     period_t period;
 

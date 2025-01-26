@@ -1,8 +1,5 @@
 // Copyright (c) 2025 Sigma Logic
 
-`include "h14tx/registers.svh"
-`include "h14tx/macros.svh"
-
 module h14tx_encoding_terc4
     import h14tx_pkg::symbol_t;
     import h14tx_pkg::data_t;

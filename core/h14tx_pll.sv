@@ -1,24 +1,19 @@
 // Copyright (c) 2025 Sigma Logic
 
 `include "h14tx/registers.svh"
-`include "h14tx/macros.svh"
 
-module h14tx_pll
-#(
-    parameter integer IDivSel = 4,
+module h14tx_pll #(
+    parameter integer IDivSel  = 4,
     parameter integer ODiv0Sel = 5,
     parameter integer ODiv1Sel = 25,
-    parameter integer MDivSel = 53
-)
-(
-    input logic ref_clk,
+    parameter integer MDivSel  = 53
+) (
+    input logic ref_clk_70mhz,
     input logic rst_n,
 
     output logic lock,
     output logic pixel_clk,
-    output logic serial_clk,
-
-    output logic timings_rst_n
+    output logic serial_clk
 );
 
     logic sink[6];
@@ -134,7 +129,7 @@ module h14tx_pll
         .CLKOUT5(sink[3]),
         .CLKOUT6(sink[4]),
         .CLKFBOUT(sink[5]),
-        .CLKIN(ref_clk),
+        .CLKIN(ref_clk_70mhz),
         .CLKFB(gw_gnd),
         .RESET(~rst_n),
         .PLLPWD(gw_gnd),
@@ -175,10 +170,5 @@ module h14tx_pll
         .SSCMDSEL_FRAC({gw_gnd, gw_gnd, gw_gnd})
     );
 
-    `VEC(4) reset_cnt;
-
-    `FFSRN(reset_cnt, reset_cnt + !timings_rst_n, 0, ref_clk, rst_n & lock)
-
-    assign timings_rst_n = &reset_cnt;
-
 endmodule : h14tx_pll
+
