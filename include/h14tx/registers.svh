@@ -88,3 +88,21 @@
       end                                                         \
     end                                                           \
   end
+
+// Flip-Flop with load-enable and asynchronous active-low reset (implicit clock and reset)
+// __q: Q output of FF
+// __d: D input of FF
+// __load: load d value into FF
+// __reset_value: value assigned upon reset
+// (__clk: clock input)
+// (__arst_n: asynchronous reset, active-low)
+`define FFL(__q, __d, __load, __reset_value, __clk = `REG_DFLT_CLK, __arst_n = `REG_DFLT_RSTN) \
+    always_ff @(posedge (__clk) or negedge (__arst_n)) begin                                    \
+        if (!__arst_n) begin                                                                      \
+            __q <= (__reset_value);                                                                 \
+        end else begin                                                                            \
+            if (__load) begin                                                                       \
+                __q <= (__d);                                                                         \
+            end                                                                                     \
+        end                                                                                       \
+    end

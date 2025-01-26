@@ -1,24 +1,23 @@
 // Copyright (c) 2025 Sigma Logic
 
-`include "h14tx/macros.svh"
 `include "h14tx/registers.svh"
 
 module h14tx_timings_cursor
 #(
     parameter integer BitWidth = 11,
     parameter integer BitHeight = 10,
-    parameter `VEC(BitWidth) Width = BitWidth'(1650),
-    parameter `VEC(BitHeight) Height = BitHeight'(720)
+    parameter logic [BitWidth-1:0] Width = BitWidth'(1650),
+    parameter logic [BitHeight-1:0] Height = BitHeight'(720)
 )
 (
     input logic clk,
     input logic rst_n,
-    output `VEC(BitWidth) x,
-    output `VEC(BitHeight) y
+    output logic [BitWidth-1:0] x,
+    output logic [BitHeight-1:0] y
 );
 
-    localparam `VEC(BitWidth) HLimit = BitWidth'(Width - 1);
-    localparam `VEC(BitHeight) VLimit = BitHeight'(Height - 1);
+    localparam logic [BitWidth-1:0] HLimit = BitWidth'(Width - 1);
+    localparam logic [BitHeight-1:0] VLimit = BitHeight'(Height - 1);
 
     `FFARNC(
         x,

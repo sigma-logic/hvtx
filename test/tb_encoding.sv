@@ -1,6 +1,5 @@
-`timescale 1ps/1ps
+`timescale 1ps / 1ps
 
-`include "h14tx/macros.svh"
 `include "h14tx/cea861d.svh"
 
 module tb_encoding
@@ -21,13 +20,13 @@ module tb_encoding
     logic clk, rst_n;
 
     clk_rst_gen u_clk_rst_gen (
-        .clk(clk),
+        .clk  (clk),
         .rst_n(rst_n)
     );
 
-    ctl_t ctl [3];
-    data_t data [3];
-    video_t video [3];
+    ctl_t ctl[3];
+    data_t data[3];
+    video_t video[3];
 
     period_t period;
 
@@ -58,24 +57,20 @@ module tb_encoding
         video = {8'b0, 8'b0, 8'b0};
         period = Control;
 
-        #1
-
-        #2 ctl = {2'b10, 2'b0, 2'b0};
+        #1 #2 ctl = {2'b10, 2'b0, 2'b0};
         #2 ctl = {2'b01, 2'b01, 2'b0};
         #2 ctl = {2'b0, 2'b0, 2'b0};
 
-        period = DataIslandPreamble; #2
-        period = DataIslandGuard; #2
-        period = DataIslandActive; #2
-
-        #2 data = {4'b0111, 4'b0, 4'b0};
+        period = DataIslandPreamble;
+        #2 period = DataIslandGuard;
+        #2 period = DataIslandActive;
+        #2 #2 data = {4'b0111, 4'b0, 4'b0};
         #2 data = {4'b1101, 4'b1000, 4'b0001};
 
-        period = VideoPreamble; #2
-        period = VideoGuard; #2
-        period = VideoActive; #2
-
-        #2 video = {8'hFF, 8'hFF, 8'hFF};
+        period = VideoPreamble;
+        #2 period = VideoGuard;
+        #2 period = VideoActive;
+        #2 #2 video = {8'hFF, 8'hFF, 8'hFF};
         #2 video = {8'h00, 8'hFF, 8'hFF};
         #2 video = {8'hFF, 8'h00, 8'hFF};
         #2 video = {8'hFF, 8'hFF, 8'h00};
@@ -84,9 +79,8 @@ module tb_encoding
         #2 video = {8'h00, 8'h00, 8'hFF};
         #2 video = {8'h00, 8'h00, 8'h00};
 
-        period = VideoActive; #2
-
-        $finish;
+        period = VideoActive;
+        #2 $finish;
     end
 
 endmodule : tb_encoding

@@ -1,5 +1,4 @@
-`include "h14tx/registers.svh"
-`include "h14tx/macros.svh"
+// Copyright (c) 2025 Sigma Logic
 
 module h14tx_encoding_guard
     import h14tx_pkg::symbol_t;

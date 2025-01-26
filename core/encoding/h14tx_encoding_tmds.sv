@@ -1,5 +1,6 @@
+// Copyright (c) 2025 Sigma Logic
+
 `include "h14tx/registers.svh"
-`include "h14tx/macros.svh"
 
 module h14tx_encoding_tmds
     import h14tx_pkg::video_t;
@@ -25,10 +26,10 @@ module h14tx_encoding_tmds
     always_comb begin
         n1d = 4'b0;
         for (i = 0; i < 8; i++) begin
-           n1d = n1d + {3'b0, video[i]};
+            n1d = n1d + {3'b0, video[i]};
         end
 
-        case(ir[0] + ir[1] + ir[2] + ir[3] + ir[4] + ir[5] + ir[6] + ir[7])
+        case (ir[0] + ir[1] + ir[2] + ir[3] + ir[4] + ir[5] + ir[6] + ir[7])
             4'b0000: n1ir = 5'sd0;
             4'b0001: n1ir = 5'sd1;
             4'b0010: n1ir = 5'sd2;
@@ -52,14 +53,11 @@ module h14tx_encoding_tmds
         ir[0] = video[0];
 
         if (n1d > 4'd4 || (n1d == 4'd4 && video[0] == 1'b0)) begin
-            for(j = 0; j < 7; j++)
-                ir[j + 1] = ir[j] ~^ video[j + 1];
+            for (j = 0; j < 7; j++) ir[j+1] = ir[j] ~^ video[j+1];
 
             ir[8] = 1'b0;
-        end
-        else begin
-            for(j = 0; j < 7; j++)
-                ir[j + 1] = ir[j] ^ video[j + 1];
+        end else begin
+            for (j = 0; j < 7; j++) ir[j+1] = ir[j] ^ video[j+1];
 
             ir[8] = 1'b1;
         end
@@ -69,21 +67,14 @@ module h14tx_encoding_tmds
 
             if (ir[8]) begin
                 dispadd = n1ir - n0ir;
-            end
-            else begin
+            end else begin
                 dispadd = n0ir - n1ir;
             end
-        end
-        else if (
-            (disparity > 5'sd0 && n1ir > n0ir) ||
-            (disparity < 5'sd0 && n1ir < n0ir)
-        )
-        begin
-            symbol = {1'b1, ir[8], ~ir[7:0]};
+        end else if ((disparity > 5'sd0 && n1ir > n0ir) || (disparity < 5'sd0 && n1ir < n0ir)) begin
+            symbol  = {1'b1, ir[8], ~ir[7:0]};
             dispadd = (n0ir - n1ir) + (ir[8] ? 5'sd2 : 5'sd0);
-        end
-        else begin
-            symbol = {1'b0, ir[8], ir[7:0]};
+        end else begin
+            symbol  = {1'b0, ir[8], ir[7:0]};
             dispadd = (n1ir - n0ir) - (~ir[8] ? 5'sd2 : 5'sd0);
         end
     end

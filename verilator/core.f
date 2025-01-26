@@ -1,6 +1,6 @@
 -Iinclude
 
-gowin/prim_sim.v
+gowin/prim_sim.sv
 
 core/h14tx_pkg.sv
 
@@ -16,4 +16,10 @@ core/encoding/h14tx_encoding_tmds.sv
 core/encoding/h14tx_encoding_guard.sv
 core/encoding/h14tx_encoding_top.sv
 
+core/packets/h14tx_packet_assembler.sv
+core/packets/h14tx_pkt_null.sv
+core/packets/h14tx_pkt_avi_info_frame.sv
+
 core/h14tx_pll.sv
+core/h14tx_dvo.sv
+

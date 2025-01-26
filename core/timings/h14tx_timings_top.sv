@@ -1,28 +1,27 @@
 // Copyright (c) 2025 Sigma Logic
 
 `include "h14tx/registers.svh"
-`include "h14tx/macros.svh"
 
 module h14tx_timings_top
     import h14tx_pkg::period_t;
 #(
     parameter integer BitWidth = 11,
     parameter integer BitHeight = 10,
-    parameter `VEC(BitWidth) FrameWidth = 1650,
-    parameter `VEC(BitHeight) FrameHeight = 750,
-    parameter `VEC(BitWidth) ActiveWidth = 1280,
-    parameter `VEC(BitHeight) ActiveHeight = 720,
-    parameter `VEC(BitWidth) HFrontPorch = 110,
-    parameter `VEC(BitHeight) HSyncWidth = 40,
-    parameter `VEC(BitWidth) VFrontPorch = 5,
-    parameter `VEC(BitHeight) VSyncWidth = 5,
+    parameter logic [BitWidth-1:0] FrameWidth = 1650,
+    parameter logic [BitHeight-1:0] FrameHeight = 750,
+    parameter logic [BitWidth-1:0] ActiveWidth = 1280,
+    parameter logic [BitHeight-1:0] ActiveHeight = 720,
+    parameter logic [BitWidth-1:0] HFrontPorch = 110,
+    parameter logic [BitHeight-1:0] HSyncWidth = 40,
+    parameter logic [BitWidth-1:0] VFrontPorch = 5,
+    parameter logic [BitHeight-1:0] VSyncWidth = 5,
     parameter logic InvertPolarity = 1'b0
 ) (
     input logic clk,
     input logic rst_n,
 
-    output `VEC(BitWidth) x,
-    output `VEC(BitHeight) y,
+    output logic [BitWidth-1:0] x,
+    output logic [BitHeight-1:0] y,
 
     output logic hsync,
     output logic vsync,
