@@ -5,5 +5,28 @@
     <Version>5</Version>
     <Device name="GW5AST-138B" pn="GW5AST-LV138FPG676AC1/I0">gw5ast138b-007</Device>
     <FileList>
+        <File path="core/encoding/h14tx_encoding_ctl.sv" type="file.verilog" enable="1"/>
+        <File path="core/encoding/h14tx_encoding_guard.sv" type="file.verilog" enable="1"/>
+        <File path="core/encoding/h14tx_encoding_terc4.sv" type="file.verilog" enable="1"/>
+        <File path="core/encoding/h14tx_encoding_tmds.sv" type="file.verilog" enable="1"/>
+        <File path="core/encoding/h14tx_encoding_top.sv" type="file.verilog" enable="1"/>
+        <File path="core/h14tx_dvo.sv" type="file.verilog" enable="1"/>
+        <File path="core/h14tx_pkg.sv" type="file.verilog" enable="1"/>
+        <File path="core/h14tx_pll.sv" type="file.verilog" enable="1"/>
+        <File path="core/h14tx_rst_sync.sv" type="file.verilog" enable="1"/>
+        <File path="core/packets/h14tx_packet_assembler.sv" type="file.verilog" enable="1"/>
+        <File path="core/packets/h14tx_pkt_avi_info_frame.sv" type="file.verilog" enable="1"/>
+        <File path="core/packets/h14tx_pkt_null.sv" type="file.verilog" enable="1"/>
+        <File path="core/serdes/h14tx_serchan.sv" type="file.verilog" enable="1"/>
+        <File path="core/serdes/h14tx_serdes.sv" type="file.verilog" enable="1"/>
+        <File path="core/timings/h14tx_timings_cursor.sv" type="file.verilog" enable="1"/>
+        <File path="core/timings/h14tx_timings_data.sv" type="file.verilog" enable="1"/>
+        <File path="core/timings/h14tx_timings_sync.sv" type="file.verilog" enable="1"/>
+        <File path="core/timings/h14tx_timings_top.sv" type="file.verilog" enable="1"/>
+        <File path="core/timings/h14tx_timings_video.sv" type="file.verilog" enable="1"/>
+        <File path="top/top_dvo.sv" type="file.verilog" enable="1"/>
+        <File path="phy.cst" type="file.cst" enable="1"/>
+        <File path="timing.sdc" type="file.sdc" enable="1"/>
+        <File path="src/capture.rao" type="file.gao" enable="1"/>
     </FileList>
 </Project>

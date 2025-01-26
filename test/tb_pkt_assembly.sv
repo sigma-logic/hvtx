@@ -1,6 +1,8 @@
 `timescale 1ns/1ps
 
-module tb_pkt_assembly;
+module tb_pkt_assembly
+    import h14tx_pkg::packet_t;
+;
 
     logic rst_n, clk;
 
@@ -9,12 +11,10 @@ module tb_pkt_assembly;
         .rst_n(rst_n)
     );
 
-    logic [23:0] header;
-    logic [55:0] sub[3:0];
+    packet_t packet;
 
-    h14tx_pkt_avi_info_frame u_avi_info_frame_pkt (
-        .header(header),
-        .sub(sub)
+    h14tx_pkt_null u_null_pkt (
+        .pkt(packet)
     );
 
     logic [4:0] counter;
@@ -24,8 +24,7 @@ module tb_pkt_assembly;
         .clk(clk),
         .rst_n(rst_n),
         .active(1'b1),
-        .header(header),
-        .sub(sub),
+        .packet(packet),
         .chunk(chunk),
         .counter(counter)
     );

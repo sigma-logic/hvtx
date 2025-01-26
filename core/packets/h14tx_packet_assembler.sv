@@ -6,12 +6,15 @@
 
 `include "h14tx/registers.svh"
 
-module h14tx_packet_assembler (
+module h14tx_packet_assembler
+    import h14tx_pkg::packet_t;
+(
     input logic clk,
     input logic rst_n,
     input logic active,
-    input logic [23:0] header,  // See Table 5-8 Packet Types
-    input logic [55:0] sub [3:0],
+
+    input packet_t packet,
+
     output logic [8:0] chunk,  // See Figure 5-4 Data Island Packet and ECC Structure
     output logic [4:0] counter = 5'd0
 );
@@ -26,11 +29,11 @@ module h14tx_packet_assembler (
     logic [7:0] parity[4:0] = '{8'd0, 8'd0, 8'd0, 8'd0, 8'd0};
 
     logic [63:0] bch[3:0];
-    assign bch[0] = {parity[0], sub[0]};
-    assign bch[1] = {parity[1], sub[1]};
-    assign bch[2] = {parity[2], sub[2]};
-    assign bch[3] = {parity[3], sub[3]};
-    logic [31:0] bch4 = {parity[4], header};
+    assign bch[0] = {parity[0], packet.sub[0]};
+    assign bch[1] = {parity[1], packet.sub[1]};
+    assign bch[2] = {parity[2], packet.sub[2]};
+    assign bch[3] = {parity[3], packet.sub[3]};
+    logic [31:0] bch4 = {parity[4], packet.header};
     assign chunk = {
         bch[3][counter_t2_p1],
         bch[2][counter_t2_p1],
@@ -61,10 +64,10 @@ module h14tx_packet_assembler (
     generate
         for (genvar i = 0; i < 5; i++) begin : parity_calc
             if (i == 4) begin
-                assign parity_next[i] = next_ecc(parity[i], header[counter]);
+                assign parity_next[i] = next_ecc(parity[i], packet.header[counter]);
             end else begin
-                assign parity_next[i] = next_ecc(parity[i], sub[i][counter_t2]);
-                assign parity_next_next[i] = next_ecc(parity_next[i], sub[i][counter_t2_p1]);
+                assign parity_next[i] = next_ecc(parity[i], packet.sub[i][counter_t2]);
+                assign parity_next_next[i] = next_ecc(parity_next[i], packet.sub[i][counter_t2_p1]);
             end
         end
     endgenerate

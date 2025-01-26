@@ -13,36 +13,28 @@ module h14tx_rst_sync (
 
     typedef enum logic [1:0] {
         Assert,
-        WaitLock,
-        WaitGuard,
+        Guard,
         Deassert
     } state_t;
 
     state_t state, next_state;
 
-    logic rst_n = ext_rst_n;
+    logic rst_n;
+    assign rst_n = ext_rst_n && lock;
 
     `FF(state, next_state, Assert)
-    `FFARNC(guard_counter, guard_counter + 1, state !== WaitGuard, 4'b0)
-    `FF(sync_rst_n, state == Deassert, 1'b0)
+    `FFARNC(guard_counter, guard_counter + 4'b1, state != Guard, 4'd0)
+
+    assign sync_rst_n = state == Deassert;
 
     always_comb begin
         next_state = state;
 
         unique case (state)
             Assert: begin
-                if (!lock) begin
-                    next_state = WaitLock;
-                end else if (ext_rst_n) begin
-                    next_state = Deassert;
-                end
+                next_state = Guard;
             end
-            WaitLock: begin
-                if (lock) begin
-                    next_state = WaitGuard;
-                end
-            end
-            WaitGuard: begin
+            Guard: begin
                 if (&guard_counter) begin
                     next_state = Deassert;
                 end

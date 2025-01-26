@@ -3,7 +3,7 @@
 `include "h14tx/registers.svh"
 
 module h14tx_pll #(
-    parameter integer IDivSel  = 4,
+    parameter integer IDivSel  = 2,
     parameter integer ODiv0Sel = 5,
     parameter integer ODiv1Sel = 25,
     parameter integer MDivSel  = 53

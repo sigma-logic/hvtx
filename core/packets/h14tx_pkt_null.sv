@@ -1,10 +1,11 @@
-module h14tx_pkt_null (
-    output logic [23:0] header,
-    output logic [55:0] sub [3:0]
+module h14tx_pkt_null
+    import h14tx_pkg::packet_t;
+(
+    output packet_t pkt
 );
 
-    assign header = 24'b0;
-    assign sub = {56'h0, 56'h0, 56'h0, 56'h0};
+    assign pkt.header = 24'b0;
+    assign pkt.sub = {56'h0, 56'h0, 56'h0, 56'h0};
 
 endmodule : h14tx_pkt_null
 

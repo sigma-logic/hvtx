@@ -16,4 +16,6 @@ test/clk_rst_gen.sv
 test/tb_timings.sv
 test/tb_encoding.sv
 test/tb_pkt_assembly.sv
+test/tb_rst_sync.sv
+test/tb_dvo.sv
 
