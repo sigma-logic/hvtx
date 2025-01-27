@@ -54,9 +54,9 @@ module h14tx_dvo
         .period(period)
     );
 
-    packet_t pkt;
+    packet_t packet;
 
-    h14tx_pkt_null u_null_pkt (.pkt(pkt));
+    h14tx_pkt_avi_info_frame u_avi_info_frame_pkt (.clk(clk), .packet(packet));
 
     logic [8:0] chunk;
     logic [4:0] counter;
@@ -65,36 +65,30 @@ module h14tx_dvo
         .clk(clk),
         .rst_n(rst_n),
         .active(period == DataIslandActive),
-        .packet(pkt),
+        .packet(packet),
         .counter(counter),
         .chunk(chunk)
     );
 
-    ctl_t  ctl [2:0];
-    data_t data[2:0];
+    ctl_t  [2:0] ctl;
+    data_t [2:0] data;
+
+    assign ctl[0] = {hsync, vsync};
+    assign data = {chunk[8:5], chunk[4:1], hsync, vsync, x != 0, chunk[0]};
 
     always_comb begin
-        ctl[0]  = {hsync, vsync};
-        ctl[1]  = 2'b00;
-        ctl[2]  = 2'b00;
-
-        data[0] = {hsync, vsync, x != 0, chunk[0]};
-        data[1] = chunk[4:1];
-        data[2] = chunk[8:5];
-
         if (period == VideoPreamble) begin
-            ctl[1] = 2'b01;
+            ctl[2:1] = 4'b0001;
         end else if (period == DataIslandPreamble) begin
-            ctl[1] = 2'b01;
-            ctl[2] = 2'b01;
+            ctl[2:1] = 4'b0101;
+        end else begin
+            ctl[2:1] = 4'b0000;
         end
     end
 
     generate
         for (genvar i = 0; i < 3; i = i + 1) begin : gen_chan
-            h14tx_encoding_top #(
-                .Chan(i)
-            ) u_encoder (
+            h14tx_encoding_top #(i) u_encoder (
                 .clk(clk),
                 .rst_n(rst_n),
                 .ctl(ctl[i]),

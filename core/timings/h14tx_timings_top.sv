@@ -51,6 +51,8 @@ module h14tx_timings_top
         .VSyncStart(ActiveHeight + VFrontPorch),
         .VSyncEnd  (ActiveHeight + VFrontPorch + VSyncWidth)
     ) u_sync_timings (
+        .clk(clk),
+        .rst_n(rst_n),
         .x(x),
         .y(y),
         .hsync(hsync),
@@ -72,15 +74,14 @@ module h14tx_timings_top
 
     h14tx_timings_data #(
         .BitWidth(BitWidth),
-        .BitHeight(BitHeight),
         .FrameWidth(FrameWidth),
         .ActiveWidth(ActiveWidth)
     ) u_data_timings (
         .x(x),
-        .y(y),
         .timings(data_period)
     );
 
     assign period = period_t'(video_period + data_period);
 
 endmodule : h14tx_timings_top
+

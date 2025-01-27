@@ -8,6 +8,7 @@ module h14tx_serdes
     input logic pixel_clk,
     input logic serial_clk,
     input logic rst_n,
+
     input symbol_t [2:0] channels,
 
     output hdmi_tmds_t hdmi_out

@@ -1,5 +1,7 @@
 // Copyright (c) 2025 Sigma Logic
 
+`include "h14tx/registers.svh"
+
 module h14tx_timings_video
     import h14tx_pkg::period_t;
     import h14tx_pkg::Control;
@@ -40,3 +42,4 @@ module h14tx_timings_video
     end
 
 endmodule : h14tx_timings_video
+

@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Sigma Logic
+ // Copyright (c) 2025 Sigma Logic
 
 `include "h14tx/registers.svh"
 
@@ -8,6 +8,7 @@ module h14tx_encoding_tmds
 (
     input logic clk,
     input logic rst_n,
+    input logic active_n,
 
     input video_t video,
 
@@ -53,11 +54,15 @@ module h14tx_encoding_tmds
         ir[0] = video[0];
 
         if (n1d > 4'd4 || (n1d == 4'd4 && video[0] == 1'b0)) begin
-            for (j = 0; j < 7; j++) ir[j+1] = ir[j] ~^ video[j+1];
+            for (j = 0; j < 7; j++) begin
+                ir[j+1] = ir[j] ~^ video[j+1];
+            end
 
             ir[8] = 1'b0;
         end else begin
-            for (j = 0; j < 7; j++) ir[j+1] = ir[j] ^ video[j+1];
+            for (j = 0; j < 7; j++) begin
+                ir[j+1] = ir[j] ^ video[j+1];
+            end
 
             ir[8] = 1'b1;
         end
@@ -79,6 +84,7 @@ module h14tx_encoding_tmds
         end
     end
 
-    `FF(disparity, disparity + dispadd, 5'sd0)
+    `FFARNC(disparity, disparity + dispadd, active_n, 5'sd0)
 
 endmodule : h14tx_encoding_tmds
+

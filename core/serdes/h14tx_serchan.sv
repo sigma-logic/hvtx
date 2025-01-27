@@ -39,4 +39,3 @@ module h14tx_serchan
     );
 
 endmodule : h14tx_serchan
-

@@ -1,10 +1,14 @@
 // Copyright (c) 2025 Sigma Logic
 
+`include "h14tx/registers.svh"
+
 // Implementation of HDMI Auxiliary Video InfoFrame packet.
 // By Sameer Puri https://github.com/sameer
 
 // See Section 8.2.1
-module h14tx_pkt_avi_info_frame #(
+module h14tx_pkt_avi_info_frame
+    import h14tx_pkg::packet_t;
+#(
     parameter bit [1:0] VideoFormat = 2'b00,  // 00 = RGB, 01 = YCbCr 4:2:2, 10 = YCbCr 4:4:4
     parameter bit ActiveFormatInfoPresent = 1'b0,  // Not valid
     parameter bit [1:0] BarInfo = 2'b00,  // Not valid
@@ -21,24 +25,25 @@ module h14tx_pkt_avi_info_frame #(
     parameter bit [1:0] ContentType = 2'b00,  // No data, becomes Graphics if ItContent = 1'b1.
     parameter bit [3:0] PixelRepetition = 4'b0000  // None
 ) (
-    output logic [23:0] header,
-    output logic [55:0] sub[3:0]
+    input logic clk,
+    output packet_t packet
 );
-
 
     localparam bit [4:0] Length = 5'd13;
     localparam bit [7:0] Version = 8'd2;
     localparam bit [6:0] Type = 7'd2;
 
-    assign header = {{3'b0, Length}, Version, {1'b1, Type}};
+    packet_t pkt;
+
+    assign pkt.header = {{3'b0, Length}, Version, {1'b1, Type}};
 
     // PB0-PB6 = sub0
-    // PB7-13 =  sub1
+    // PB7-13 =  sub1sus
     // PB14-20 = sub2
     // PB21-27 = sub3
     logic [7:0] packet_bytes[27:0];
 
-    assign packet_bytes[0] = 8'd1 + ~(header[23:16] + header[15:8] + header[7:0] + packet_bytes[13] + packet_bytes[12] + packet_bytes[11] + packet_bytes[10] + packet_bytes[9] + packet_bytes[8] + packet_bytes[7] + packet_bytes[6] + packet_bytes[5] + packet_bytes[4] + packet_bytes[3] + packet_bytes[2] + packet_bytes[1]);
+    assign packet_bytes[0] = 8'd1 + ~(pkt.header[23:16] + pkt.header[15:8] + pkt.header[7:0] + packet_bytes[13] + packet_bytes[12] + packet_bytes[11] + packet_bytes[10] + packet_bytes[9] + packet_bytes[8] + packet_bytes[7] + packet_bytes[6] + packet_bytes[5] + packet_bytes[4] + packet_bytes[3] + packet_bytes[2] + packet_bytes[1]);
     assign packet_bytes[1] = {1'b0, VideoFormat, ActiveFormatInfoPresent, BarInfo, ScanInfo};
     assign packet_bytes[2] = {Colorometry, PictureAspectRatio, ActiveFormatAspectRatio};
     assign packet_bytes[3] = {
@@ -73,7 +78,7 @@ module h14tx_pkt_avi_info_frame #(
             assign packet_bytes[i] = 8'd0;
         end
         for (i = 0; i < 4; i++) begin : pb_to_sub
-            assign sub[i] = {
+            assign pkt.sub[i] = {
                 packet_bytes[6+i*7],
                 packet_bytes[5+i*7],
                 packet_bytes[4+i*7],
@@ -84,6 +89,8 @@ module h14tx_pkt_avi_info_frame #(
             };
         end
     endgenerate
+
+    `FFNR(packet, pkt)
 
 endmodule
 

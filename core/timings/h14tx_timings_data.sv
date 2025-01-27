@@ -1,5 +1,7 @@
 // Copyright (c) 2025 Sigma Logic
 
+`include "h14tx/registers.svh"
+
 module h14tx_timings_data
     import h14tx_pkg::period_t;
     import h14tx_pkg::Control;
@@ -8,17 +10,15 @@ module h14tx_timings_data
     import h14tx_pkg::DataIslandActive;
 #(
     parameter integer BitWidth = 11,
-    parameter integer BitHeight = 10,
     parameter logic [BitWidth-1:0] FrameWidth = BitWidth'(1650),
     parameter logic [BitWidth-1:0] ActiveWidth = BitWidth'(1280)
 ) (
-    input logic [ BitWidth-1:0] x,
-    input logic [BitHeight-1:0] y,
+    input logic [BitWidth-1:0] x,
 
     output period_t timings
 );
 
-    localparam logic [10:0] HardLimit = 10'd18;
+    localparam logic [10:0] HardLimit = 11'd18;
 
     localparam logic [10:0] PacketsFit = (FrameWidth - ActiveWidth  // VD period
     - 2  // V guard
@@ -56,3 +56,4 @@ module h14tx_timings_data
     end
 
 endmodule : h14tx_timings_data
+

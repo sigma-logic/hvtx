@@ -30,7 +30,7 @@ module h14tx_rst_sync (
     always_comb begin
         next_state = state;
 
-        unique case (state)
+        case (state)
             Assert: begin
                 next_state = Guard;
             end
@@ -43,6 +43,9 @@ module h14tx_rst_sync (
                 if (!ext_rst_n) begin
                     next_state = Assert;
                 end
+            end
+            default: begin
+                next_state = Assert;
             end
         endcase
     end

@@ -33,44 +33,40 @@ module h14tx_encoding_top
     symbol_t ctl_s, data_s, video_s, guard_s;
 
     h14tx_encoding_ctl u_ctl_enc (
+        .clk(clk),
         .ctl(ctl),
         .symbol(ctl_s)
     );
 
     h14tx_encoding_terc4 u_terc4_enc (
+        .clk(clk),
         .data  (data),
         .symbol(data_s)
     );
 
     h14tx_encoding_tmds u_tmds_enc (
         .clk(clk),
-        .rst_n(rst_n && period == VideoActive),
+        .rst_n(rst_n),
+        .active_n(period !== VideoActive),
         .video(video),
         .symbol(video_s)
     );
 
-    h14tx_encoding_guard #(
-        .Chan(Chan)
-    ) u_gaurd_enc (
+    h14tx_encoding_guard #(Chan) u_gaurd_enc (
+        .clk(clk),
         .guard_switch(period == DataIslandGuard),
         .bypass_symbol(data_s),
         .symbol(guard_s)
     );
 
-    symbol_t symbol_sel;
-
     always_comb begin
-        unique case (period)
-            VideoPreamble: symbol_sel = ctl_s;
-            DataIslandPreamble: symbol_sel = ctl_s;
-            VideoGuard: symbol_sel = guard_s;
-            DataIslandGuard: symbol_sel = guard_s;
-            VideoActive: symbol_sel = video_s;
-            DataIslandActive: symbol_sel = data_s;
-            default: symbol_sel = ctl_s;
+        case (period)
+            VideoGuard: symbol = guard_s;
+            DataIslandGuard: symbol = guard_s;
+            VideoActive: symbol = video_s;
+            DataIslandActive: symbol = data_s;
+            default: symbol = ctl_s;
         endcase
     end
-
-    `FFNR(symbol, symbol_sel)
 
 endmodule : h14tx_encoding_top

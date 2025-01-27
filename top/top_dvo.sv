@@ -5,8 +5,10 @@
 module top_dvo
     import h14tx_pkg::cea861d_config_t;
     import h14tx_pkg::symbol_t;
+    import h14tx_pkg::video_t;
 (
     input logic rst_n,
+    input logic switch,
 
     output logic ref_clk_70mhz,
 
@@ -23,7 +25,12 @@ module top_dvo
     localparam integer Mode = 4;
     localparam cea861d_config_t CeaCfg = `CEA861D_CONFIG(Mode);
 
-    h14tx_pll u_pll (
+    h14tx_pll #(
+        .IDivSel (CeaCfg.pll_idiv_sel),
+        .ODiv0Sel(CeaCfg.pll_odiv0_sel),
+        .ODiv1Sel(CeaCfg.pll_odiv1_sel),
+        .MDivSel (CeaCfg.pll_mdiv_sel)
+    ) u_pll (
         .ref_clk_70mhz(ref_clk_70mhz),
         .rst_n(rst_n),
         .lock(pll_lock),
@@ -41,6 +48,9 @@ module top_dvo
     logic [CeaCfg.bit_width-1:0] x;
     logic [CeaCfg.bit_height-1:0] y;
 
+    video_t [2:0] video;
+    assign video = 24'hFFFFFF;
+
     symbol_t [2:0] channels;
 
     h14tx_dvo #(
@@ -48,7 +58,7 @@ module top_dvo
     ) u_dvo (
         .clk(pixel_clk),
         .rst_n(sync_rst_n),
-        .video({8'hFF, 8'hFF, 8'hFF}),
+        .video(video),
         .x(x),
         .y(y),
         .channels(channels)
@@ -57,7 +67,7 @@ module top_dvo
     h14tx_serdes u_serdes (
         .pixel_clk(pixel_clk),
         .serial_clk(serial_clk),
-        .rst_n(sync_rst_n),
+        .rst_n(rst_n),
         .channels(channels),
         .hdmi_out(
         '{
