@@ -21,25 +21,23 @@ module h14tx_encoding_top
     input logic clk,
     input logic rst_n,
 
-    input ctl_t   ctl,
-    input data_t  data,
-    input video_t video,
+    input ctl_t   ctl /*synthesis syn_keep=1*/,
+    input data_t  data /*synthesis syn_keep=1*/,
+    input video_t video /*synthesis syn_keep=1*/,
 
-    input period_t period,
+    input period_t period /*synthesis syn_keep=1*/,
 
-    output symbol_t symbol
+    output symbol_t symbol /*synthesis syn_keep=1*/
 );
 
-    symbol_t ctl_s, data_s, video_s, guard_s;
+    symbol_t ctl_s, data_s, video_s, guard_s /*synthesis syn_keep=1*/;
 
     h14tx_encoding_ctl u_ctl_enc (
-        .clk(clk),
         .ctl(ctl),
         .symbol(ctl_s)
     );
 
     h14tx_encoding_terc4 u_terc4_enc (
-        .clk(clk),
         .data  (data),
         .symbol(data_s)
     );
@@ -53,7 +51,6 @@ module h14tx_encoding_top
     );
 
     h14tx_encoding_guard #(Chan) u_gaurd_enc (
-        .clk(clk),
         .guard_switch(period == DataIslandGuard),
         .bypass_symbol(data_s),
         .symbol(guard_s)

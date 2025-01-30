@@ -15,7 +15,7 @@ module h14tx_packet_assembler
 
     input packet_t packet,
 
-    output logic [8:0] chunk,  // See Figure 5-4 Data Island Packet and ECC Structure
+    output logic [8:0] chunk /*synthesis syn_keep=1*/,  // See Figure 5-4 Data Island Packet and ECC Structure
     output logic [4:0] counter = 5'd0
 );
 
@@ -34,17 +34,17 @@ module h14tx_packet_assembler
     assign bch[2] = {parity[2], packet.sub[2]};
     assign bch[3] = {parity[3], packet.sub[3]};
     logic [31:0] bch4 = {parity[4], packet.header};
-//    assign chunk = {
-//        bch[3][counter_t2_p1],
-//        bch[2][counter_t2_p1],
-//        bch[1][counter_t2_p1],
-//        bch[0][counter_t2_p1],
-//        bch[3][counter_t2],
-//        bch[2][counter_t2],
-//        bch[1][counter_t2],
-//        bch[0][counter_t2],
-//        bch4[counter]
-//    };
+    assign chunk = {
+        bch[3][counter_t2_p1],
+        bch[2][counter_t2_p1],
+        bch[1][counter_t2_p1],
+        bch[0][counter_t2_p1],
+        bch[3][counter_t2],
+        bch[2][counter_t2],
+        bch[1][counter_t2],
+        bch[0][counter_t2],
+        bch4[counter]
+    };
 
     // See Figure 5-5 Error Correction Code generator. Generalization of a CRC with binary BCH.
     // See https://web.archive.org/web/20190520020602/http://hamsterworks.co.nz/mediawiki/index.php/Minimal_HDMI#Computing_the_ECC for an explanation of the implementation.
@@ -90,20 +90,6 @@ module h14tx_packet_assembler
         end else begin
             parity <= '{8'd0, 8'd0, 8'd0, 8'd0, 8'd0};
         end
-    end
-
-    always_ff @(posedge clk) begin
-        chunk <= {
-            bch[3][counter_t2_p1],
-            bch[2][counter_t2_p1],
-            bch[1][counter_t2_p1],
-            bch[0][counter_t2_p1],
-            bch[3][counter_t2],
-            bch[2][counter_t2],
-            bch[1][counter_t2],
-            bch[0][counter_t2],
-            bch4[counter]
-        };
     end
 
 endmodule

@@ -7,18 +7,37 @@ part = "GW5AST-LV138FPG676AC1/I0"
 
 [hdl]
 standard = "sysv2017"
+include = ["include"]
+top = "top_dvo"
 
 [files]
 verilog = [
-    "core/h14tx_timings_cursor.sv",
-    "core/h14tx_timings_sync.sv",
-    "top.sv",
+    "core/h14tx_pkg.sv",
+    "core/timings/h14tx_timings_cursor.sv",
+    "core/timings/h14tx_timings_data.sv",
+    "core/timings/h14tx_timings_sync.sv",
+    "core/timings/h14tx_timings_video.sv",
+    "core/timings/h14tx_timings_top.sv",
+    "core/encoding/h14tx_encoding_ctl.sv",
+    "core/encoding/h14tx_encoding_terc4.sv",
+    "core/encoding/h14tx_encoding_tmds.sv",
+    "core/encoding/h14tx_encoding_guard.sv",
+    "core/encoding/h14tx_encoding_top.sv",
+    "core/packets/h14tx_packet_assembler.sv",
+    "core/packets/h14tx_pkt_null.sv",
+    "core/packets/h14tx_pkt_avi_info_frame.sv",
+    "core/serdes/h14tx_serchan.sv",
+    "core/serdes/h14tx_serdes.sv",
+    "core/h14tx_rst_sync.sv",
+    "core/h14tx_pll.sv",
+    "core/h14tx_dvo.sv",
+    "top/top_dvo.sv",
 ]
+cst = "phy.cst"
+sdc = "timing.sdc"
 
 [programmer]
 fs = "impl/pnr/arv-vo.fs"
 
 preset.sram = { op = "2" }
 preset.spi = { op = "53" }
-cst = "phy.cst"
-sdc = "timing.sdc"

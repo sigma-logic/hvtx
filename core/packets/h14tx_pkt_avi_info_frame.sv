@@ -25,7 +25,6 @@ module h14tx_pkt_avi_info_frame
     parameter bit [1:0] ContentType = 2'b00,  // No data, becomes Graphics if ItContent = 1'b1.
     parameter bit [3:0] PixelRepetition = 4'b0000  // None
 ) (
-    input logic clk,
     output packet_t packet
 );
 
@@ -33,9 +32,7 @@ module h14tx_pkt_avi_info_frame
     localparam bit [7:0] Version = 8'd2;
     localparam bit [6:0] Type = 7'd2;
 
-    packet_t pkt;
-
-    assign pkt.header = {{3'b0, Length}, Version, {1'b1, Type}};
+    assign packet.header = {{3'b0, Length}, Version, {1'b1, Type}};
 
     // PB0-PB6 = sub0
     // PB7-13 =  sub1sus
@@ -43,7 +40,7 @@ module h14tx_pkt_avi_info_frame
     // PB21-27 = sub3
     logic [7:0] packet_bytes[27:0];
 
-    assign packet_bytes[0] = 8'd1 + ~(pkt.header[23:16] + pkt.header[15:8] + pkt.header[7:0] + packet_bytes[13] + packet_bytes[12] + packet_bytes[11] + packet_bytes[10] + packet_bytes[9] + packet_bytes[8] + packet_bytes[7] + packet_bytes[6] + packet_bytes[5] + packet_bytes[4] + packet_bytes[3] + packet_bytes[2] + packet_bytes[1]);
+    assign packet_bytes[0] = 8'd1 + ~(packet.header[23:16] + packet.header[15:8] + packet.header[7:0] + packet_bytes[13] + packet_bytes[12] + packet_bytes[11] + packet_bytes[10] + packet_bytes[9] + packet_bytes[8] + packet_bytes[7] + packet_bytes[6] + packet_bytes[5] + packet_bytes[4] + packet_bytes[3] + packet_bytes[2] + packet_bytes[1]);
     assign packet_bytes[1] = {1'b0, VideoFormat, ActiveFormatInfoPresent, BarInfo, ScanInfo};
     assign packet_bytes[2] = {Colorometry, PictureAspectRatio, ActiveFormatAspectRatio};
     assign packet_bytes[3] = {
@@ -78,7 +75,7 @@ module h14tx_pkt_avi_info_frame
             assign packet_bytes[i] = 8'd0;
         end
         for (i = 0; i < 4; i++) begin : pb_to_sub
-            assign pkt.sub[i] = {
+            assign packet.sub[i] = {
                 packet_bytes[6+i*7],
                 packet_bytes[5+i*7],
                 packet_bytes[4+i*7],
@@ -89,8 +86,6 @@ module h14tx_pkt_avi_info_frame
             };
         end
     endgenerate
-
-    `FFNR(packet, pkt)
 
 endmodule
 

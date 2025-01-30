@@ -48,10 +48,10 @@ module top_dvo
     logic [CeaCfg.bit_width-1:0] x;
     logic [CeaCfg.bit_height-1:0] y;
 
-    video_t [2:0] video;
-    assign video = 24'hFFFFFF;
+    video_t [2:0] video /*synthesis syn_keep=1*/;
+    assign video = switch ? 24'hFFFFFF : 24'h111111;
 
-    symbol_t [2:0] channels;
+    symbol_t [2:0] channels /*synthesis syn_keep=1*/;
 
     h14tx_dvo #(
         .CeaCfg(CeaCfg)

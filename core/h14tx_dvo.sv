@@ -28,12 +28,13 @@ module h14tx_dvo
     output logic [ CeaCfg.bit_width-1:0] x,
     output logic [CeaCfg.bit_height-1:0] y,
 
-    output symbol_t [2:0] channels
+    output symbol_t [2:0] channels /*synthesis syn_keep=1*/
 );
 
-    logic hsync, vsync;
+    logic hsync /*synthesis syn_keep=1*/;
+    logic vsync /*synthesis syn_keep=1*/;
 
-    period_t period;
+    period_t period /*synthesis syn_keep=1*/;
 
     h14tx_timings_top #(
         .BitWidth(CeaCfg.bit_width),
@@ -54,12 +55,14 @@ module h14tx_dvo
         .period(period)
     );
 
-    packet_t packet;
+    packet_t packet /*synthesis syn_keep=1*/;
 
-    h14tx_pkt_avi_info_frame u_avi_info_frame_pkt (.clk(clk), .packet(packet));
+    h14tx_pkt_avi_info_frame u_pkt (
+        .packet(packet) /*synthesis syn_keep=1*/
+    );
 
-    logic [8:0] chunk;
-    logic [4:0] counter;
+    logic [8:0] chunk /*synthesis syn_keep=1*/;
+    logic [4:0] counter /*synthesis syn_keep=1*/;
 
     h14tx_packet_assembler u_pkt_assembler (
         .clk(clk),
@@ -70,13 +73,13 @@ module h14tx_dvo
         .chunk(chunk)
     );
 
-    ctl_t  [2:0] ctl;
-    data_t [2:0] data;
+    ctl_t  [2:0] ctl /*synthesis syn_keep=1*/;
+    data_t [2:0] data /*synthesis syn_keep=1*/;
 
     assign ctl[0] = {hsync, vsync};
     assign data = {chunk[8:5], chunk[4:1], hsync, vsync, x != 0, chunk[0]};
 
-    always_comb begin
+    always_comb begin /*synthesis syn_keep=1*/
         if (period == VideoPreamble) begin
             ctl[2:1] = 4'b0001;
         end else if (period == DataIslandPreamble) begin

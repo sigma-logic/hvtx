@@ -51,8 +51,6 @@ module h14tx_timings_top
         .VSyncStart(ActiveHeight + VFrontPorch),
         .VSyncEnd  (ActiveHeight + VFrontPorch + VSyncWidth)
     ) u_sync_timings (
-        .clk(clk),
-        .rst_n(rst_n),
         .x(x),
         .y(y),
         .hsync(hsync),
