@@ -1,17 +1,13 @@
 // Copyright (c) 2025 Sigma Logic
 
-`include "h14tx/registers.svh"
-
-module h14tx_encoding_tmds
-    import h14tx_pkg::video_t;
-    import h14tx_pkg::symbol_t;
-(
+module h14tx_tmds8b10b (
     input logic clk,
     input logic rst_n,
 
-    input video_t video,
+    input logic enable,
+    input logic [7:0] video,
 
-    output symbol_t symbol
+    output logic [9:0] symbol
 );
 
     logic signed [4:0] disparity;
@@ -79,6 +75,12 @@ module h14tx_encoding_tmds
         end
     end
 
-    `FF(disparity, disparity + dispadd, 5'sd0)
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n || !enable) begin
+            disparity <= 0;
+        end else begin
+            disparity <= disparity + dispadd;
+        end
+    end
 
-endmodule : h14tx_encoding_tmds
+endmodule : h14tx_tmds8b10b

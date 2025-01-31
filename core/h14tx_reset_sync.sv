@@ -1,11 +1,10 @@
 // Copyright (c) 2025 Sigma Logic
 
-`include "h14tx/registers.svh"
+module h14tx_reset_sync (
+    input logic clk,
+    input logic ext_rst_n,
+    input logic lock,
 
-module h14tx_rst_sync (
-    input  logic clk,
-    input  logic lock,
-    input  logic ext_rst_n,
     output logic sync_rst_n
 );
 
@@ -22,8 +21,21 @@ module h14tx_rst_sync (
     logic rst_n;
     assign rst_n = ext_rst_n && lock;
 
-    `FF(state, next_state, Assert)
-    `FFARNC(guard_counter, guard_counter + 4'b1, state != Guard, 4'd0)
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            state <= Assert;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n || state != Guard) begin
+            guard_counter <= 0;
+        end else begin
+            guard_counter <= guard_counter + 4'd1;
+        end
+    end
 
     assign sync_rst_n = state == Deassert;
 
@@ -47,4 +59,4 @@ module h14tx_rst_sync (
         endcase
     end
 
-endmodule : h14tx_rst_sync
+endmodule : h14tx_reset_sync

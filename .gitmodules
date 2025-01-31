@@ -1,0 +1,3 @@
+[submodule "common-cores"]
+	path = common-cores
+	url = git@github.com:sigma-logic/common-cores.git
