@@ -8,16 +8,28 @@ part = "GW5AST-LV138FPG676AC1/I0"
 [hdl]
 standard = "sysv2017"
 include = ["include"]
-top = "top_dvo"
+top = "top_rgb"
 
 [files]
 verilog = [
+  "common-cores/cores/simple_pll/simple_pll_pkg.sv",
+  "common-cores/cores/simple_pll/simple_pll.sv",
+  "common-cores/cores/lvds/lvds_pkg.sv",
+  "common-cores/cores/lvds/lvds_out.sv",
+  "core/h14tx_pkg.sv",
+  "core/h14tx_reset_sync.sv",
+  "core/h14tx_timings.sv",
+  "core/h14tx_tmds8b10b.sv",
+  "core/h14tx_serdes.sv",
+  "core/h14tx_channel.sv",
+  "core/h14tx_rgb.sv",
+  "top/top_rgb.sv"
 ]
 cst = "phy.cst"
 sdc = "timing.sdc"
 
 [programmer]
-fs = "impl/pnr/h14tx.fs"
+fs = "impl/pnr/project.fs"
 
 preset.sram = { op = "2" }
 preset.spi = { op = "53" }

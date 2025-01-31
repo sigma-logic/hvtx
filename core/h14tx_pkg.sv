@@ -1,3 +1,5 @@
+// Copyright (c) 2025 Sigma Logic
+
 package h14tx_pkg;
 
     typedef enum logic [2:0] {

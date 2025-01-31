@@ -7,4 +7,4 @@
 *.fst
 obj_dir
 .nvim
-
+common-cores

@@ -50,7 +50,7 @@ module top_rgb
     );
 
     logic [2:0][7:0] rgb  /*synthesis syn_keep=1*/;
-    assign rgb = 24'hFFFFFF;
+    assign rgb = {x, 1'b0, y, 2'b0};
 
     localparam timings_cfg_t TimingsCfg = '{11, 10, 1650, 750, 1280, 720, 110, 40, 5, 5, 1'b0};
 
