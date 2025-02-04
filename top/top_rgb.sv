@@ -19,7 +19,7 @@ module top_rgb
     h14tx_clk #(
         .IDiv(1),
         .MDiv(30),
-        .ODiv(2)
+        .ODiv(4)
     ) u_clk (
         .ref_clk(ref_clk),
         .rst_n(rst_n),
@@ -30,7 +30,7 @@ module top_rgb
 
     logic [2:0][7:0] rgb  /*synthesis syn_keep=1*/;
 
-    localparam timings_cfg_t TimingsCfg = '{12, 11, 2200, 1125, 1920, 1080, 88, 44, 4, 5, 1'b0};
+    localparam timings_cfg_t TimingsCfg = '{11, 10, 1650, 750, 1280, 720, 110, 40, 5, 5, 1'b0};
 
     logic [ TimingsCfg.bit_width-1:0] x;
     logic [TimingsCfg.bit_height-1:0] y;
