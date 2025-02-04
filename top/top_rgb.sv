@@ -12,8 +12,6 @@ module top_rgb
     output logic [2:0] tmds_chan_n
 );
 
-//    OSC #(3) u_osc (ref_clk);
-
     logic serial_clk, pixel_clk, tmds_rst_n;
 
     h14tx_clk #(
@@ -32,7 +30,7 @@ module top_rgb
 
     localparam timings_cfg_t TimingsCfg = '{11, 10, 1650, 750, 1280, 720, 110, 40, 5, 5, 1'b0};
 
-    logic [ TimingsCfg.bit_width-1:0] x;
+    logic [TimingsCfg.bit_width-1:0] x;
     logic [TimingsCfg.bit_height-1:0] y;
 
     logic [20:0] counter;
