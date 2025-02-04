@@ -22,7 +22,7 @@ module h14tx_channel
 
     // Encode Control symbol
     always_comb
-        unique case (ctl) /*synthesis full_case*/
+        unique case (ctl)
             2'b00: ctl_s = 10'b1101010100;
             2'b01: ctl_s = 10'b0010101011;
             2'b10: ctl_s = 10'b0101010100;

@@ -26,7 +26,7 @@ module h14tx_timings
     input logic clk,
     input logic rst_n,
 
-    output logic [BitWidth-1:0] x,
+    output logic [ BitWidth-1:0] x,
     output logic [BitHeight-1:0] y,
 
     output logic hsync,
