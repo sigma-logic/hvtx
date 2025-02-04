@@ -1,16 +1,17 @@
+IO_PORT "ref_clk" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_LOC  "ref_clk" P16;
+
 IO_PORT "rst_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
 IO_LOC  "rst_n" K16;
 
-IO_PORT "tmds_clk_p" IO_TYPE=LVDS25;
+IO_PORT "tmds_clk_p" IO_TYPE=LVDS25 DRIVE=6;
 IO_LOC  "tmds_clk_p" Y22,Y23;
 
-IO_PORT "tmds_chan_p[0]" IO_TYPE=LVDS25;
+IO_PORT "tmds_chan_p[0]" IO_TYPE=LVDS25 DRIVE=6;
 IO_LOC  "tmds_chan_p[0]" AB24,AC24;
 
-IO_PORT "tmds_chan_p[1]" IO_TYPE=LVDS25;
+IO_PORT "tmds_chan_p[1]" IO_TYPE=LVDS25 DRIVE=6;
 IO_LOC  "tmds_chan_p[1]" V24,W24;
 
-IO_PORT "tmds_chan_p[2]" IO_TYPE=LVDS25;
+IO_PORT "tmds_chan_p[2]" IO_TYPE=LVDS25 DRIVE=6;
 IO_LOC  "tmds_chan_p[2]" AA22,AA23;
-
-// INS_LOC "u_pll/u_pll" PLL_L[0];

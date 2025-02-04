@@ -7,9 +7,8 @@
     <FileList>
         <File path="common-cores/cores/lvds/lvds_out.sv" type="file.verilog" enable="1"/>
         <File path="common-cores/cores/lvds/lvds_pkg.sv" type="file.verilog" enable="1"/>
-        <File path="common-cores/cores/simple_pll/simple_pll.sv" type="file.verilog" enable="1"/>
-        <File path="common-cores/cores/simple_pll/simple_pll_pkg.sv" type="file.verilog" enable="1"/>
         <File path="core/h14tx_channel.sv" type="file.verilog" enable="1"/>
+        <File path="core/h14tx_clk.sv" type="file.verilog" enable="1"/>
         <File path="core/h14tx_pkg.sv" type="file.verilog" enable="1"/>
         <File path="core/h14tx_reset_sync.sv" type="file.verilog" enable="1"/>
         <File path="core/h14tx_rgb.sv" type="file.verilog" enable="1"/>
