@@ -1,0 +1,31 @@
+IO_PORT "ref_clk" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_LOC  "ref_clk" P16;
+
+IO_PORT "rst_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_LOC  "rst_n" K16;
+
+IO_PORT "hdmi_clk_p_a" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_clk_p_a" Y22,Y23;
+
+IO_PORT "hdmi_chan_p_a[0]" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_chan_p_a[0]" AB24,AC24;
+
+IO_PORT "hdmi_chan_p_a[1]" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_chan_p_a[1]" V24,W24;
+
+IO_PORT "hdmi_chan_p_a[2]" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_chan_p_a[2]" AA22,AA23;
+
+
+
+IO_PORT "hdmi_clk_p_b" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_clk_p_b" K20,J20;
+
+IO_PORT "hdmi_chan_p_b[0]" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_chan_p_b[0]" D19,C19;
+
+IO_PORT "hdmi_chan_p_b[1]" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_chan_p_b[1]" M15,L15;
+
+IO_PORT "hdmi_chan_p_b[2]" IO_TYPE=LVCMOS33D;
+IO_LOC  "hdmi_chan_p_b[2]" J25,J26;

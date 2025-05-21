@@ -1,4 +1,4 @@
-name = "h14tx"
+name = "hvtx"
 version = 5
 
 [device]
@@ -7,16 +7,15 @@ part = "GW5AST-LV138FPG676AC1/I0"
 
 [hdl]
 standard = "sysv2017"
-top = "top_rgb"
+top = "top"
 
 [files]
 verilog = [
-  "common-cores/cores/lvds/**/*.sv",
-  "core/**/*.sv",
-  "top/top_rgb.sv"
+  "src/**/*.sv",
+  "src/**/*[!_tmp].v"
 ]
-cst = "phy.cst"
-sdc = "timing.sdc"
+cst = "src/phy.cst"
+# sdc = "timing.sdc"
 
 [pnr]
 place_option = 3
