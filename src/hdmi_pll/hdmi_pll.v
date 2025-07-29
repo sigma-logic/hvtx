@@ -5,7 +5,7 @@
 //Part Number: GW5AST-LV138FPG676AC1/I0
 //Device: GW5AST-138
 //Device Version: B
-//Created Time: Wed May 21 16:11:34 2025
+//Created Time: Tue Jul 29 22:21:32 2025
 
 module hdmi_pll (lock, clkout0, clkin, reset);
 
@@ -81,14 +81,14 @@ PLL PLL_inst (
 defparam PLL_inst.FCLKIN = "50";
 defparam PLL_inst.IDIV_SEL = 1;
 defparam PLL_inst.FBDIV_SEL = 1;
-defparam PLL_inst.ODIV0_SEL = 5;
+defparam PLL_inst.ODIV0_SEL = 2;
 defparam PLL_inst.ODIV1_SEL = 8;
 defparam PLL_inst.ODIV2_SEL = 8;
 defparam PLL_inst.ODIV3_SEL = 8;
 defparam PLL_inst.ODIV4_SEL = 8;
 defparam PLL_inst.ODIV5_SEL = 8;
 defparam PLL_inst.ODIV6_SEL = 8;
-defparam PLL_inst.MDIV_SEL = 37;
+defparam PLL_inst.MDIV_SEL = 30;
 defparam PLL_inst.MDIV_FRAC_SEL = 0;
 defparam PLL_inst.ODIV0_FRAC_SEL = 0;
 defparam PLL_inst.CLKOUT0_EN = "TRUE";

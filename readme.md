@@ -4,6 +4,7 @@
 * For **Arora** FPGA family
 * **Compact** - not exceed **100** LUTs, **100** FFs
 * **Modular** - Divided into convenient modules
+* **Fmax** - > 150 Mhz
 
 ### Notes
 * **Video Only** - only for clean video output
@@ -12,7 +13,6 @@
 
 ### In The Future
 * **AXI** streaming support
-* Integrated **DPLL** to mitigate timing violations
 
 ## Modules and usage
 Just copy core [file](https://github.com/sigma-logic/hvtx/tree/main/src/hvtx.sv) to your project
@@ -23,7 +23,7 @@ Complete example can be found [here](https://github.com/sigma-logic/hvtx/tree/ma
 Slides the cursor over a frame of the specified size
 ```sv
 hvtx_cursor #
-( .WIDTH(WIDTH)
+( .WID(WIDTH)
 , .FRAME_WIDTH(1650)
 , .FRAME_HEIGHT(750)
 ) u_cursor
@@ -35,10 +35,11 @@ hvtx_cursor #
 ```
 
 #### `hvtx_sync`
-Generates synchronization pulses based on the cursor position in the frame
+Generates synchronization pulses based on the cursor position in the frame.\
+Latency: 2
 ```sv
 hvtx_sync #
-( .WIDTH(WIDTH)
+( .WID(WIDTH)
 , .FRAME_WIDTH(1650)
 , .FRAME_HEIGHT(750)
 , .ACTIVE_WIDTH(1280)
@@ -58,11 +59,12 @@ hvtx_sync #
 ```
 
 #### `hvtx_mod`
-Combines current timings and active video data and produces a vector of 3 modulated tmds 10-bit symbols (per channel) ready for transmission  
+Combines current timings and active video data and produces a vector of 3 modulated tmds 10-bit symbols (per channel) ready for transmission\
+Latency: 2
 ```sv
 hvtx_mod u_mod
-( .i_pixel_clk(pixel_clk)
-, .i_serial_clk(serial_clk)
+( .i_pclk(pixel_clk)
+, .i_sclk(serial_clk)
 , .i_rst(~rst_n)
 , .i_hs(hs)
 , .i_vs(vs)
@@ -76,8 +78,8 @@ hvtx_mod u_mod
 Serializes tmds symbols and passes them to the LVDS output buffer. Serial clock should be **5** times faster than pixel clock. It is recommended to synthesize fast clock and then divide it by 5 to get pixel clock.
 ```sv
 hvtx_ser u_ser
-( .i_pixel_clk(pixel_clk)
-, .i_serial_clk(serial_clk)
+( .i_pclk(pixel_clk)
+, .i_sclk(serial_clk)
 , .i_rst(~rst_n)
 , .i_chan_vec(chan_vec)
 , .o_hdmi_clk_p(hdmi_clk_p_a)

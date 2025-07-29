@@ -10,6 +10,7 @@
         <File path="src/pixel_clkdiv/pixel_clkdiv.v" type="file.verilog" enable="1"/>
         <File path="src/top.sv" type="file.verilog" enable="1"/>
         <File path="src/phy.cst" type="file.cst" enable="1"/>
+        <File path="src/timings.sdc" type="file.sdc" enable="1"/>
         <File path="src/hvtx.rao" type="file.gao" enable="0"/>
     </FileList>
 </Project>

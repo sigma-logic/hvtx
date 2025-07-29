@@ -15,7 +15,7 @@ verilog = [
   "src/**/*[!_tmp].v"
 ]
 cst = "src/phy.cst"
-# sdc = "timing.sdc"
+sdc = "timings.sdc"
 
 [pnr]
 place_option = 3
