@@ -2,9 +2,9 @@
 
 ### Features
 * For **Arora** FPGA family
-* **Compact** - not exceed **100** LUTs, **100** FFs
+* **Compact** - not exceed **200** LUTs, **200** FFs
 * **Modular** - Divided into convenient modules
-* **Fmax** - > 150 Mhz
+* **Fmax** - > 165 Mhz
 
 ### Notes
 * **Video Only** - only for clean video output
@@ -15,7 +15,7 @@
 * **AXI** streaming support
 
 ## Modules and usage
-Just copy core [file](https://github.com/sigma-logic/hvtx/tree/main/src/hvtx.sv) to your project
+Copy the core [file](https://github.com/sigma-logic/hvtx/tree/main/src/hvtx.sv) to your project
 
 Complete example can be found [here](https://github.com/sigma-logic/hvtx/tree/main/src/top.sv)
 
@@ -60,7 +60,7 @@ hvtx_sync #
 
 #### `hvtx_mod`
 Combines current timings and active video data and produces a vector of 3 modulated tmds 10-bit symbols (per channel) ready for transmission\
-Latency: 2
+Latency: 4
 ```sv
 hvtx_mod u_mod
 ( .i_pclk(pixel_clk)

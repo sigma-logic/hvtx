@@ -3,20 +3,18 @@ module hvtx_cursor #
 
 , parameter int unsigned FRAME_WIDTH = 1650
 , parameter int unsigned FRAME_HEIGHT = 750
-
-, parameter type POS_T = logic [WID-1:0]
 )
 ( input  var logic i_clk
 , input  var logic i_rst
 
-, output var POS_T o_x
-, output var POS_T o_y
+, output var logic [WID-1:0] o_x
+, output var logic [WID-1:0] o_y
 );
 
-    var POS_T x, y;
+    logic [WID-1:0] x, y;
 
-    var logic last_pixel;
-    var logic last_line;
+    logic last_pixel;
+    logic last_line;
 
     assign last_pixel = x == FRAME_WIDTH  - WID'(1);
     assign last_line  = y == FRAME_HEIGHT - WID'(1);
@@ -55,21 +53,19 @@ module hvtx_sync #
 , parameter int unsigned H_SYNC = 40
 , parameter int unsigned V_PORCH = 5
 , parameter int unsigned V_SYNC = 5
-
-, parameter type CURSOR_T = logic [WID-1:0]
 )
 ( input  var logic i_clk
 
-, input  var CURSOR_T i_x
-, input  var CURSOR_T i_y
+, input  var logic [WID-1:0] i_x
+, input  var logic [WID-1:0] i_y
 
 , output var logic o_hs
 , output var logic o_vs
 , output var logic o_de
 );
 
-    var CURSOR_T x, y;
-    var logic hs, vs, de;
+    logic [WID-1:0] x, y;
+    logic hs, vs, de;
 
     assign x = i_x;
     assign y = i_y;
@@ -129,7 +125,7 @@ module hvtx_mod
 , output var logic [2:0][9:0] o_chan_vec
 );
 
-    var logic [2:0][1:0] ctl;
+    logic [2:0][1:0] ctl;
 
     assign ctl = {4'b0000, i_vs, i_hs};
 
@@ -157,20 +153,28 @@ module hvtx_mux #
 , output var logic [9:0] o_symbol
 );
 
-    var logic de;
-    var logic [9:0] ctl_symbol;
-    var logic [9:0] video_symbol;
+    logic de_0, de_1, de_2;
+    logic [1:0] ctl_0, ctl_1;
+    logic [9:0] ctl_symbol;
+    logic [9:0] video_symbol;
 
-    always_ff @(posedge i_clk)
-        de <= i_de;
+    always_ff @(posedge i_clk) begin
+        de_0 <= i_de;
+        de_1 <= de_0;
+        de_2 <= de_1;
+    end
 
-    always_ff @(posedge i_clk)
-        unique case (i_ctl)
+    always_ff @(posedge i_clk) begin
+        ctl_0 <= i_ctl;
+        ctl_1 <= ctl_0;
+
+        unique case (ctl_1)
             2'b00: ctl_symbol <= 10'b1101010100;
             2'b01: ctl_symbol <= 10'b0010101011;
             2'b10: ctl_symbol <= 10'b0101010100;
             2'b11: ctl_symbol <= 10'b1010101011;
         endcase
+    end
 
     hvtx_8b10b u_8b10b
     ( .i_clk(i_clk)
@@ -180,8 +184,8 @@ module hvtx_mux #
     );
 
     always_ff @(posedge i_clk) begin
-        if (de) o_symbol <= video_symbol;
-        else    o_symbol <= ctl_symbol;
+        if (de_2) o_symbol <= video_symbol;
+        else      o_symbol <= ctl_symbol;
     end
 
 endmodule : hvtx_mux
@@ -195,22 +199,20 @@ module hvtx_8b10b
 , output var logic [9:0] o_symbol
 );
 
-    var logic signed [4:0] disparity;
-    var logic signed [4:0] dispadd;
+    logic [1:0] rst;
 
-    var logic [8:0] ir;
-    var logic [3:0] n1d;
-    var logic [4:0] n1ir;
-    var logic [4:0] n0ir;
-    var logic [9:0] symbol;
+    always_ff @(posedge i_clk) begin
+        rst <= {rst[0], i_rst};
+    end
 
-    var logic use_xnor;
+    // Stage 0
 
-    assign n1d  = 4'($countones(i_data));
-    assign n1ir = 5'($countones(ir[7:0]));
-    assign n0ir = 5'(8 - $countones(ir[7:0]));
+    logic [3:0] n1d;
+    logic [8:0] ir, ir_r;
+    logic use_xnor;
 
-    assign use_xnor = n1d > 4'd4 || (n1d == 4'd4 && i_data[0] == 1'b0);
+    assign n1d = $countones(i_data);
+    assign use_xnor = n1d > 4 || (n1d == 4 && i_data[0] == 0);
 
     always_comb begin
         ir[0] = i_data[0];
@@ -228,25 +230,58 @@ module hvtx_8b10b
 
             ir[8] = 1'b1;
         end
-
-        if (disparity == 5'sd0 || (n1ir == n0ir)) begin
-            symbol = {~ir[8], ir[8], ir[8] ? ir[7:0] : ~ir[7:0]};
-            dispadd = ir[8] ? n1ir - n0ir : n0ir - n1ir;
-        end else if ((disparity > 5'sd0 && n1ir > n0ir) || (disparity < 5'sd0 && n1ir < n0ir)) begin
-            symbol = {1'b1, ir[8], ~ir[7:0]};
-            dispadd = (n0ir - n1ir) + (ir[8] ? 5'sd2 : 5'sd0);
-        end else begin
-            symbol = {1'b0, ir[8], ir[7:0]};
-            dispadd = (n1ir - n0ir) - (~ir[8] ? 5'sd2 : 5'sd0);
-        end
     end
 
     always_ff @(posedge i_clk) begin
-        if (i_rst) begin
+        ir_r <= ir;
+    end
+
+    // Stage 1
+
+    logic [3:0] n1ir, n1ir_r;
+    logic [9:0] symbol_eq, symbol_pos, symbol_neg;
+    logic [4:0] add_eq, add_pos, add_neg;
+
+    logic signed [4:0] ones_zeros;
+    logic signed [4:0] zeros_ones;
+
+    assign n1ir = $countones(ir_r);
+
+    assign ones_zeros = (n1ir << 1) - 4'd9;
+    assign zeros_ones = 4'd9 - (n1ir << 1);
+
+    always_ff @(posedge i_clk) begin
+        symbol_eq <= {~ir_r[8], ir_r[8], ir_r[8] ? ir_r[7:0] : ~ir_r[7:0]};
+        add_eq <= ir_r[8] ? ones_zeros : zeros_ones;
+
+        symbol_pos <= {1'b1, ir_r[8], ~ir_r[7:0]};
+        add_pos <= (zeros_ones) + (ir_r[8] ? 5'd2 : 5'd0);
+
+        symbol_neg <= {1'b0, ir_r[8], ir_r[7:0]};
+        add_neg <= (ones_zeros) - (~ir_r[8] ? 5'd2 : 5'd0);
+
+        n1ir_r <= n1ir;
+    end
+
+    // Stage 2
+
+    logic signed [4:0] disparity;
+
+    always_ff @(posedge i_clk) begin
+        if (rst[1]) begin
+            o_symbol <= 0;
             disparity <= 0;
         end else begin
-            disparity <= disparity + dispadd;
-            o_symbol <= symbol;
+            if (disparity == 0 || n1ir_r == 4) begin
+                o_symbol <= symbol_eq;
+                disparity <= disparity + add_eq;
+            end else if ((disparity >= 0 && n1ir_r >= 4) || (disparity < 0 && n1ir_r < 4)) begin
+                o_symbol <= symbol_pos;
+                disparity <= disparity + add_pos;
+            end else begin
+                o_symbol <= symbol_neg;
+                disparity <= disparity + add_neg;
+            end
         end
     end
 
@@ -268,7 +303,7 @@ module hvtx_ser #
 );
 
     generate for(genvar i = 0; i < 3; i++) begin : gen_oser10
-        var logic hdmi_chan;
+        logic hdmi_chan;
 
         OSER10 u_chan_serde
         ( .Q(hdmi_chan)

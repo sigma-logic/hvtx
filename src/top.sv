@@ -1,16 +1,16 @@
 module top
-( input logic rst_n
-, inout logic ref_clk
+( input  var logic i_rst_n
+, input  var logic i_ref_clk
 
-, output logic       hdmi_clk_p_a
-, output logic       hdmi_clk_n_a
-, output logic [2:0] hdmi_chan_p_a
-, output logic [2:0] hdmi_chan_n_a
+, output var logic       o_hdmi_clk_p_a
+, output var logic       o_hdmi_clk_n_a
+, output var logic [2:0] o_hdmi_chan_p_a
+, output var logic [2:0] o_hdmi_chan_n_a
 
-, output logic       hdmi_clk_p_b
-, output logic       hdmi_clk_n_b
-, output logic [2:0] hdmi_chan_p_b
-, output logic [2:0] hdmi_chan_n_b
+, output var logic       o_hdmi_clk_p_b
+, output var logic       o_hdmi_clk_n_b
+, output var logic [2:0] o_hdmi_chan_p_b
+, output var logic [2:0] o_hdmi_chan_n_b
 );
 
     localparam int unsigned WID = 12;
@@ -29,8 +29,8 @@ module top
     logic serial_clk /*synthesis syn_keep=1*/;
     logic pixel_clk /*synthesis syn_keep=1*/;
 
-    logic [WID-1:0] x;
-    logic [WID-1:0] y;
+    logic [WID-1:0] x_0, x_1, x_2;
+    logic [WID-1:0] y_0, y_1, y_2;
 
     logic hs_0, vs_0, de_0;
     logic hs_1, vs_1, de_1;
@@ -44,7 +44,7 @@ module top
     logic [WID-1:0] box_y;
 
     always_ff @(posedge pixel_clk) begin
-        if (!rst_n) begin
+        if (!i_rst_n) begin
             frame_cnt <= 0;
         end else if (frame_cnt == FRAME_DURATION - WID'(1)) begin
             frame_cnt <= 0;
@@ -63,12 +63,15 @@ module top
     logic [23:0] video;
 
     always_ff @(posedge pixel_clk) begin
-        x_gte_box_x <= x >= box_x;
-        x_lt_box_x_plus_10 <= x < box_x + WID'(10);
-        y_gte_box_y <= y >= box_y;
-        y_lt_box_y_plus_10 <= y < box_y + WID'(10);
+        x_1 <= x_0; y_1 <= y_0;
+        x_2 <= x_1; y_2 <= y_1;
 
-        video <= x_gte_box_x & x_lt_box_x_plus_10 & y_gte_box_y && y_lt_box_y_plus_10 ? 24'hff00a8 : 24'h0;
+        x_gte_box_x <= x_2 >= box_x;
+        x_lt_box_x_plus_10 <= x_2 < box_x + WID'(10);
+        y_gte_box_y <= y_2 >= box_y;
+        y_lt_box_y_plus_10 <= y_2 < box_y + WID'(10);
+
+        video <= x_gte_box_x & x_lt_box_x_plus_10 & y_gte_box_y && y_lt_box_y_plus_10 ? 24'h00f0f0 : 24'hc0c0c0;
         {hs_1, vs_1, de_1} <= {hs_0, vs_0, de_0};
         {hs_2, vs_2, de_2} <= {hs_1, vs_1, de_1};
     end
@@ -76,14 +79,14 @@ module top
     hdmi_pll u_hdmi_pll
     ( .lock()
     , .clkout0(serial_clk)
-    , .clkin(ref_clk)
-    , .reset(~rst_n)
+    , .clkin(i_ref_clk)
+    , .reset(~i_rst_n)
     );
 
     pixel_clkdiv u_pixel_clkdiv
     ( .clkout(pixel_clk)
     , .hclkin(serial_clk)
-    , .resetn(rst_n)
+    , .resetn(i_rst_n)
     );
 
     hvtx_cursor #
@@ -92,9 +95,9 @@ module top
     , .FRAME_HEIGHT(1125)
     ) u_cursor
     ( .i_clk(pixel_clk)
-    , .i_rst(~rst_n)
-    , .o_x(x)
-    , .o_y(y)
+    , .i_rst(~i_rst_n)
+    , .o_x(x_0)
+    , .o_y(y_0)
     );
 
     hvtx_sync #
@@ -109,8 +112,8 @@ module top
     , .V_SYNC(V_SYNC)
     ) u_sync
     ( .i_clk(pixel_clk)
-    , .i_x(x)
-    , .i_y(y)
+    , .i_x(x_0)
+    , .i_y(y_0)
     , .o_hs(hs_0)
     , .o_vs(vs_0)
     , .o_de(de_0)
@@ -129,23 +132,23 @@ module top
     hvtx_ser #("ELVDS") u_ser_a
     ( .i_pclk(pixel_clk)
     , .i_sclk(serial_clk)
-    , .i_rst(~rst_n)
+    , .i_rst(~i_rst_n)
     , .i_chan_vec(chan_vec)
-    , .o_hdmi_clk_p(hdmi_clk_p_a)
-    , .o_hdmi_clk_n(hdmi_clk_n_a)
-    , .o_hdmi_chan_p(hdmi_chan_p_a)
-    , .o_hdmi_chan_n(hdmi_chan_n_a)
+    , .o_hdmi_clk_p(o_hdmi_clk_p_a)
+    , .o_hdmi_clk_n(o_hdmi_clk_n_a)
+    , .o_hdmi_chan_p(o_hdmi_chan_p_a)
+    , .o_hdmi_chan_n(o_hdmi_chan_n_a)
     );
 
     hvtx_ser #("ELVDS") u_ser_b
     ( .i_pclk(pixel_clk)
     , .i_sclk(serial_clk)
-    , .i_rst(~rst_n)
+    , .i_rst(~i_rst_n)
     , .i_chan_vec(chan_vec)
-    , .o_hdmi_clk_p(hdmi_clk_p_b)
-    , .o_hdmi_clk_n(hdmi_clk_n_b)
-    , .o_hdmi_chan_p(hdmi_chan_p_b)
-    , .o_hdmi_chan_n(hdmi_chan_n_b)
+    , .o_hdmi_clk_p(o_hdmi_clk_p_b)
+    , .o_hdmi_clk_n(o_hdmi_clk_n_b)
+    , .o_hdmi_chan_p(o_hdmi_chan_p_b)
+    , .o_hdmi_chan_n(o_hdmi_chan_n_b)
     );
 
 endmodule : top
